@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Raytracing {
     class Sphere : ISceneObject {
@@ -11,5 +12,28 @@ namespace Raytracing {
             this.R = r;
             this.Colour = colour;
         }
+
+        public HitPoint CalculateHitPoint(Ray ray) {
+            // TODO maybe also return the point, not just lambda
+            Vector3 CE = ray.Origin - Centre;
+            float a = 1;
+            float b = 2 * Vector3.Dot(CE, ray.Direction);
+            float c = (float)Math.Pow(CE.Length(), 2);
+            if(Math.Pow(b, 2) < 4 * a * c) {
+                return HitPoint.None;
+            } else {
+                double discriminant = Math.Pow(b, 2) - 4 * a * c;
+                float solution1 = (float)((-b + Math.Sqrt(discriminant)) / (2 * a));
+                float solution2 = (float)((-b - Math.Sqrt(discriminant)) / (2 * a));
+                if(solution1 >= 0 && solution2 >= 0) {
+                    return new HitPoint(Math.Min(solution1, solution2));
+                } else if(solution1 < 0 && solution2 < 0) {
+                    return HitPoint.None;
+                } else {
+                    return new HitPoint(Math.Max(solution1, solution2));
+                }
+            }
+        }
     }
+}
 }
