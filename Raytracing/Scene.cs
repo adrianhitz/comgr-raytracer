@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Raytracing {
-    class Scene {
+    public class Scene {
         private List<ISceneObject> SceneObjects;
 
         public void AddObject(ISceneObject sceneObject) {
