@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Raytracing {
@@ -23,6 +24,19 @@ namespace Raytracing {
 
         public void AddObjects(IEnumerable<ISceneObject> sceneObjects) {
             SceneObjects.AddRange(sceneObjects);
+        }
+
+        public HitPoint FindClosestHitPoint(Ray ray) {
+            HitPoint closestHitPoint = HitPoint.None;
+            foreach(ISceneObject sceneObject in SceneObjects) {
+                HitPoint hitPoint = sceneObject.CalculateHitPoint(ray);
+                if(hitPoint.Exists) {
+                    if(!closestHitPoint.Exists || hitPoint.Lambda < closestHitPoint.Lambda) {
+                        closestHitPoint = hitPoint;
+                    }
+                }
+            }
+            return closestHitPoint;
         }
 
         private static Scene CornellBox() {
