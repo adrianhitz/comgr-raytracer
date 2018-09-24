@@ -13,7 +13,7 @@ namespace Raytracing {
             spheres.Add(sceneObject);
         }
 
-        public void AddSpheres(IEnumerable<ISceneObject> sceneObjects) {
+        public void AddObjects(IEnumerable<ISceneObject> sceneObjects) {
             spheres.AddRange(sceneObjects);
         }
     }
