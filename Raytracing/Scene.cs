@@ -2,19 +2,19 @@
 
 namespace Raytracing {
     class Scene {
-        private List<Sphere> spheres;
+        private List<ISceneObject> spheres;
         private Camera Camera { get; }
 
         public Scene(Camera camera) {
-            this.spheres = new List<Sphere>();
+            this.spheres = new List<ISceneObject>();
         }
 
-        public void AddSphere(Sphere sphere) {
-            spheres.Add(sphere);
+        public void AddObject(ISceneObject sceneObject) {
+            spheres.Add(sceneObject);
         }
 
-        public void AddSpheres(IEnumerable<Sphere> s) {
-            spheres.AddRange(s);
+        public void AddSpheres(IEnumerable<ISceneObject> sceneObjects) {
+            spheres.AddRange(sceneObjects);
         }
     }
 }
