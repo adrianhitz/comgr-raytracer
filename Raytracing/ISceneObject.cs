@@ -1,7 +1,4 @@
-﻿using System;
-using System.Numerics;
-
-namespace Raytracing {
+﻿namespace Raytracing {
     public interface ISceneObject {
         HitPoint? CalculateHitPoint(Ray ray);
     }

@@ -25,8 +25,5 @@ namespace Raytracing {
         public Vector3 ToVector() {
             return new Vector3(R, G, B);
         }
-
-
-
     }
 }

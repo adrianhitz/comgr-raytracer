@@ -39,7 +39,6 @@ namespace Raytracing {
 
         private static Scene CornellBox() {
             Scene cornellBox = new Scene();
-
             cornellBox.AddObjects(new Sphere[] {
                 new Sphere(new Vector3(-1001, 0, 0), 1000, Colour.Red),
                 new Sphere(new Vector3(1001, 0, 0), 1000, Colour.Blue),
@@ -49,7 +48,6 @@ namespace Raytracing {
                 new Sphere(new Vector3(-0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow),
                 new Sphere(new Vector3(0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan)
             });
-
             return cornellBox;
         }
     }
