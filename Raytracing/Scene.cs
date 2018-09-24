@@ -3,7 +3,19 @@ using System.Numerics;
 
 namespace Raytracing {
     public class Scene {
-        private List<ISceneObject> SceneObjects;
+        private List<ISceneObject> SceneObjects { get; }
+
+        public Scene() {
+            this.SceneObjects = new List<ISceneObject>();
+        }
+
+        public Scene(ISceneObject sceneObject) : this() {
+            AddObject(sceneObject);
+        }
+
+        public Scene(IEnumerable<ISceneObject> sceneObjects) : this() {
+            AddObjects(sceneObjects);
+        }
 
         public void AddObject(ISceneObject sceneObject) {
             SceneObjects.Add(sceneObject);
@@ -27,7 +39,6 @@ namespace Raytracing {
             });
 
             return cornellBox;
-
         }
     }
 }
