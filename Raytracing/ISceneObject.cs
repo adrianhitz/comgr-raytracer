@@ -1,4 +1,4 @@
 ﻿namespace Raytracing {
-    interface ISceneObject {
+    public interface ISceneObject {
     }
 }

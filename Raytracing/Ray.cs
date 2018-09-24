@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
 namespace Raytracing {
-    class Ray {
+    public class Ray {
         public Vector3 Origin { get; }
         public Vector3 Direction { get; }
 

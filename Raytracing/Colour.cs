@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
 namespace Raytracing {
-    class Colour {
+    public class Colour {
         public float R { get; }
         public float G { get; }
         public float B { get; }

@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
 namespace Raytracing {
-    class Camera {
+    public class Camera {
         public Vector3 Position { get; }
         public Vector3 Up { get; }
         public Vector3 LookAt { get; }
