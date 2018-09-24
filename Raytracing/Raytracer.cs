@@ -1,20 +1,13 @@
 ﻿using System.Collections.Generic;
 
 namespace Raytracing {
-    public class Scene {
-        private List<ISceneObject> spheres;
+    public class Raytracer {
         private Camera Camera { get; }
+        private Scene Scene { get; }
 
-        public Scene(Camera camera) {
-            this.spheres = new List<ISceneObject>();
-        }
-
-        public void AddObject(ISceneObject sceneObject) {
-            spheres.Add(sceneObject);
-        }
-
-        public void AddObjects(IEnumerable<ISceneObject> sceneObjects) {
-            spheres.AddRange(sceneObjects);
+        public Raytracer(Camera camera, Scene scene) {
+            this.Camera = camera;
+            this.Scene = scene;
         }
     }
 }
