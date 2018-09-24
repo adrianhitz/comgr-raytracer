@@ -26,14 +26,12 @@ namespace Raytracing {
             SceneObjects.AddRange(sceneObjects);
         }
 
-        public HitPoint FindClosestHitPoint(Ray ray) {
-            HitPoint closestHitPoint = HitPoint.None;
+        public HitPoint? FindClosestHitPoint(Ray ray) {
+            HitPoint? closestHitPoint = null;
             foreach(ISceneObject sceneObject in SceneObjects) {
-                HitPoint hitPoint = sceneObject.CalculateHitPoint(ray);
-                if(hitPoint.Exists) {
-                    if(!closestHitPoint.Exists || hitPoint.Lambda < closestHitPoint.Lambda) {
-                        closestHitPoint = hitPoint;
-                    }
+                HitPoint? hitPoint = sceneObject.CalculateHitPoint(ray);
+                if(hitPoint != null && (closestHitPoint == null || hitPoint?.Lambda < closestHitPoint?.Lambda)) {
+                    closestHitPoint = hitPoint;
                 }
             }
             return closestHitPoint;
