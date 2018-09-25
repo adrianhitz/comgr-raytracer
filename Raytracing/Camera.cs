@@ -28,5 +28,12 @@ namespace Raytracing {
             Vector3 direction = F + (pixel.X * R + pixel.Y * U) * (float)Math.Tan(FOV / 2);
             return new Ray(Position, direction);
         }
+
+        public static Camera CornellBoxCamera() {
+            Vector3 position = new Vector3(-4, 0, 0);
+            Vector3 lookAt = new Vector3(0, 0, 6);
+            float fov = (float) Math.PI / 5;
+            return new Camera(position, lookAt, fov);
+        }
     }
 }
