@@ -2,7 +2,7 @@
 using System.Numerics;
 
 namespace Raytracing {
-    class Sphere : ISceneObject {
+    public class Sphere : ISceneObject {
         public Vector3 Centre { get; }
         public float R { get; }
         public Colour Colour { get; }
