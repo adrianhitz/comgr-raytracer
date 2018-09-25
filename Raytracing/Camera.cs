@@ -24,7 +24,7 @@ namespace Raytracing {
             this.U = Vector3.Cross(R, F);
         }
 
-        Ray CreateEyeRay(Vector2 pixel) {
+        public Ray CreateEyeRay(Vector2 pixel) {
             Vector3 direction = F + (pixel.X * R + pixel.Y * U) * (float)Math.Tan(FOV / 2);
             return new Ray(Position, direction);
         }
@@ -32,7 +32,7 @@ namespace Raytracing {
         public static Camera CornellBoxCamera() {
             Vector3 position = new Vector3(-4, 0, 0);
             Vector3 lookAt = new Vector3(0, 0, 6);
-            float fov = (float) Math.PI / 5;
+            float fov = (float)Math.PI / 5;
             return new Camera(position, lookAt, fov);
         }
     }
