@@ -23,7 +23,6 @@ namespace Raytracing {
         }
 
         public Colour(Vector3 colour) : this(colour.X, colour.Y, colour.Z) {
-
         }
 
         public static implicit operator Vector3(Colour colour) {
