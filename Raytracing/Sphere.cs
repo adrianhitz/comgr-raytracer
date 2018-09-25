@@ -24,14 +24,24 @@ namespace Raytracing {
                 double discriminant = Math.Pow(b, 2) - 4 * a * c;
                 float solution1 = (float)((-b + Math.Sqrt(discriminant)) / (2 * a));
                 float solution2 = (float)((-b - Math.Sqrt(discriminant)) / (2 * a));
-                if(solution1 >= 0 && solution2 >= 0) {
-                    return new HitPoint(Math.Min(solution1, solution2), this);
-                } else if(solution1 < 0 && solution2 < 0) {
+                if(solution1 < 0 && solution2 < 0) {
                     return null;
                 } else {
-                    return new HitPoint(Math.Max(solution1, solution2), this);
+                    float lambda;
+                    if(solution1 >= 0 && solution2 >= 0) {
+                        lambda = Math.Min(solution1, solution2);
+                    } else {
+                        lambda = Math.Max(solution1, solution2);
+                    }
+                    Vector3 location = ray.Origin + lambda * ray.Direction;
+                    Vector3 normal = location - Centre;
+                    return new HitPoint(lambda, location, normal, this);
                 }
             }
+        }
+
+        private Vector3 CalculateNormal(Vector3 surfacePoint) {
+            return Vector3.Normalize(surfacePoint - Centre);
         }
     }
 }
