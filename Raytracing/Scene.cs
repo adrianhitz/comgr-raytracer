@@ -45,7 +45,7 @@ namespace Raytracing {
                 Vector3 L = Vector3.Normalize(LightSource.Position - hitPoint.Position);
                 Vector3 n = hitPoint.Normal;
                 Vector3 m = new Vector3(0.8f, 0.8f, 0.8f); // TODO this should probably be in Sphere
-                return new Colour(LightSource.Colour.ToVector() * m * Vector3.Dot(n, L));
+                return new Colour(LightSource.Colour.ToVector3() * m * Vector3.Dot(n, L));
             }
             return Colour.Black;
         }

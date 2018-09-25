@@ -26,7 +26,11 @@ namespace Raytracing {
 
         }
 
-        public Vector3 ToVector() {
+        public static implicit operator Vector3(Colour colour) {
+            return new Vector3(colour.R, colour.G, colour.B);
+        }
+
+        public Vector3 ToVector3() {
             return new Vector3(R, G, B);
         }
     }
