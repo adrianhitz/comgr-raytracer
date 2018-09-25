@@ -22,6 +22,10 @@ namespace Raytracing {
             this.B = b;
         }
 
+        public Colour(Vector3 colour) : this(colour.X, colour.Y, colour.Z) {
+
+        }
+
         public Vector3 ToVector() {
             return new Vector3(R, G, B);
         }
