@@ -19,7 +19,7 @@ namespace Raytracing {
 
             for(int x = 0; x < Width; x++) {
                 for(int y = 0; y < Height; y++) {
-                    Vector2 pixel = new Vector2(x / (Width - 1) * 2 - 1, y / (Height - 1) * 2 - 1);
+                    Vector2 pixel = new Vector2((x / (float)(Width - 1)) * 2 - 1, (y / (float)(Height - 1 )) * 2 - 1);
                     Ray eyeRay = Camera.CreateEyeRay(pixel);
                     pixels[x, y] = Scene.CalculateColour(eyeRay);
                 }
@@ -33,11 +33,10 @@ namespace Raytracing {
             byte[] bytes = new byte[stride * Height];
             for(int y = 0; y < pixels.GetLength(0); y++) {
                 for(int x = 0; x < pixels.GetLength(1); x++) {
-                    int i = y * stride + x;
+                    int i = (y * pixels.GetLength(0) + x) * 4;
                     bytes[i] = (byte)(pixels[x, y].B * 255); // TODO move this calculation to class colour, also implement lambda correction
                     bytes[i + 1] = (byte)(pixels[x, y].G * 255);
                     bytes[i + 2] = (byte)(pixels[x, y].R * 255);
-                    bytes[i + 3] = 0;
                 }
             }
             return bytes;

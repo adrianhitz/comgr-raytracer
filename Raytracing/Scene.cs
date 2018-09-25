@@ -5,7 +5,7 @@ using System.Numerics;
 namespace Raytracing {
     public class Scene {
         private List<ISceneObject> SceneObjects { get; }
-        private LightSource LightSource { get; } // TODO multiple light sources
+        public LightSource LightSource { get; set; } // TODO multiple light sources
 
         public Scene() {
             this.SceneObjects = new List<ISceneObject>();
@@ -44,8 +44,11 @@ namespace Raytracing {
                 HitPoint hitPoint = potentialHitPoint.Value;
                 Vector3 L = Vector3.Normalize(LightSource.Position - hitPoint.Position);
                 Vector3 n = hitPoint.Normal;
-                Vector3 m = new Vector3(0.8f, 0.8f, 0.8f); // TODO this should probably be in Sphere
-                return new Colour(LightSource.Colour.ToVector3() * m * Vector3.Dot(n, L));
+                Vector3 m = hitPoint.HitObject.Colour; // TODO this should probably be in Sphere
+                float nL = Vector3.Dot(n, L);
+                if(nL >= 0) {
+                    return new Colour(Vector3.Multiply(LightSource.Colour.ToVector3(), m) * nL);
+                }
             }
             return Colour.Black;
         }
@@ -61,6 +64,7 @@ namespace Raytracing {
                 new Sphere(new Vector3(-0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow),
                 new Sphere(new Vector3(0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan)
             });
+            cornellBox.LightSource = new LightSource(new Vector3(0, -0.9f, -0.5f), new Colour(1, 1, 1));
             return cornellBox;
         }
     }

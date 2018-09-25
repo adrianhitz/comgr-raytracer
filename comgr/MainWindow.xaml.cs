@@ -27,7 +27,7 @@ namespace comgr {
             int width = 400;
             int height = 400;
             Image image = new Image();
-            WriteableBitmap writeableBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
+            WriteableBitmap writeableBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null); // TODO change to Bgr24
             image.Source = writeableBitmap; ;
             grid.Children.Add(image);
 

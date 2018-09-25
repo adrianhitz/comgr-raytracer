@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
 namespace Raytracing {
-    class LightSource {
+    public class LightSource {
         public Vector3 Position { get; }
         public Colour Colour { get; }
 

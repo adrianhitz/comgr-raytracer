@@ -17,11 +17,11 @@ namespace Raytracing {
             Vector3 CE = ray.Origin - Centre;
             float a = 1;
             float b = 2 * Vector3.Dot(CE, ray.Direction);
-            float c = (float)Math.Pow(CE.Length(), 2);
-            if(Math.Pow(b, 2) < 4 * a * c) {
+            float c = (float)(Math.Pow(CE.Length(), 2) - Math.Pow(R, 2));
+            double discriminant = b * b - 4 * a * c;
+            if(discriminant < 0) {
                 return null;
             } else {
-                double discriminant = Math.Pow(b, 2) - 4 * a * c;
                 float solution1 = (float)((-b + Math.Sqrt(discriminant)) / (2 * a));
                 float solution2 = (float)((-b - Math.Sqrt(discriminant)) / (2 * a));
                 if(solution1 < 0 && solution2 < 0) {
@@ -34,14 +34,10 @@ namespace Raytracing {
                         lambda = Math.Max(solution1, solution2);
                     }
                     Vector3 location = ray.Origin + lambda * ray.Direction;
-                    Vector3 normal = location - Centre;
+                    Vector3 normal = Vector3.Normalize(location - Centre);
                     return new HitPoint(lambda, location, normal, this);
                 }
             }
-        }
-
-        private Vector3 CalculateNormal(Vector3 surfacePoint) {
-            return Vector3.Normalize(surfacePoint - Centre);
         }
     }
 }
