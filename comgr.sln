@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "comgr", "comgr\comgr.csproj", "{57DB4530-9FA3-468E-8E4B-E5900A801600}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raytracing", "Raytracing\Raytracing.csproj", "{C13DAD98-367F-46B7-9B0D-B11B5C891811}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raytracing", "Raytracing\Raytracing.csproj", "{5CE8E421-6FD1-4BDD-BB33-670EB5C9EC3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{57DB4530-9FA3-468E-8E4B-E5900A801600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57DB4530-9FA3-468E-8E4B-E5900A801600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57DB4530-9FA3-468E-8E4B-E5900A801600}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C13DAD98-367F-46B7-9B0D-B11B5C891811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C13DAD98-367F-46B7-9B0D-B11B5C891811}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C13DAD98-367F-46B7-9B0D-B11B5C891811}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C13DAD98-367F-46B7-9B0D-B11B5C891811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE8E421-6FD1-4BDD-BB33-670EB5C9EC3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE8E421-6FD1-4BDD-BB33-670EB5C9EC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE8E421-6FD1-4BDD-BB33-670EB5C9EC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE8E421-6FD1-4BDD-BB33-670EB5C9EC3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

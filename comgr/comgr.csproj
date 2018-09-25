@@ -94,5 +94,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Raytracing\Raytracing.csproj">
+      <Project>{5ce8e421-6fd1-4bdd-bb33-670eb5c9ec3c}</Project>
+      <Name>Raytracing</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
