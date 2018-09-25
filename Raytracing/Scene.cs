@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
 
 namespace Raytracing {
@@ -51,7 +50,7 @@ namespace Raytracing {
                 }
             }
             return Colour.Black;
-        }
+        } 
 
         public static Scene CornellBox() {
             Scene cornellBox = new Scene();

@@ -10,7 +10,7 @@ namespace Raytracing {
         public Raytracer(Camera camera, Scene scene, int width, int height) {
             this.Camera = camera;
             this.Scene = scene;
-            this.Width = width;
+            this.Width = width; // TODO remove width and height as properties and instead pass them directly as arguments to CalculatePixels
             this.Height = height;
         }
 

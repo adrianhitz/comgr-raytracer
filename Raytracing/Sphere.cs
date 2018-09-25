@@ -33,9 +33,9 @@ namespace Raytracing {
                     } else {
                         lambda = Math.Max(solution1, solution2);
                     }
-                    Vector3 location = ray.Origin + lambda * ray.Direction;
-                    Vector3 normal = Vector3.Normalize(location - Centre);
-                    return new HitPoint(lambda, location, normal, this);
+                    Vector3 hitPointPosition = ray.Origin + lambda * ray.Direction;
+                    Vector3 normal = Vector3.Normalize(hitPointPosition - Centre);
+                    return new HitPoint(lambda, hitPointPosition, normal, this);
                 }
             }
         }
