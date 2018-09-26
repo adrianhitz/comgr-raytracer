@@ -70,7 +70,7 @@ namespace Raytracing {
                         // Specular reflectance
                         Vector3 eh = Vector3.Normalize(hitPoint.Position - ray.Origin);
                         Vector3 r = Vector3.Normalize(2 * nL * n - L);
-                        Vector3 specular = lightSource.Colour.ToVector3() * (float)Math.Pow(Vector3.Dot(r, eh), 40);
+                        Vector3 specular = lightSource.Colour.ToVector3() * (float)Math.Pow(Vector3.Dot(r, eh), 40); // TODO move k value out of here
                         colour += new Colour(specular);
                     }
                 }
