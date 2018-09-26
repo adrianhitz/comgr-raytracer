@@ -24,8 +24,8 @@ namespace comgr {
         public MainWindow() {
             InitializeComponent();
 
-            int width = 600;
-            int height = 600;
+            int width = 1000;
+            int height = 1000;
             Image image = new Image();
             WriteableBitmap writeableBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr24, null);
             image.Source = writeableBitmap; ;

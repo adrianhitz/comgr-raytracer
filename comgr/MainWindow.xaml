@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:comgr"
         mc:Ignorable="d"
         Title="comgr Raytracer" SizeToContent="WidthAndHeight">
-    <Grid Name="grid" Height="600" Width="600">
+    <Grid Name="grid" Height="700" Width="700">
         
     </Grid>
 </Window>
