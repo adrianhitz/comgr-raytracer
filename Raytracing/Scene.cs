@@ -53,6 +53,7 @@ namespace Raytracing {
         }
 
         // TODO clean this mess up
+        // TODO doesn't work with recursionDepth > 1
         public Colour CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Colour colour = new Colour();
@@ -60,24 +61,32 @@ namespace Raytracing {
                 Vector3 n = hitPoint.Normal;
                 foreach(LightSource lightSource in LightSources) {
                     Vector3 L = Vector3.Normalize(lightSource.Position - hitPoint.Position);
+                    float lightDistance = (lightSource.Position - hitPoint.Position).Length();
+                    HitPoint shadowFeelerHitPoint = FindClosestHitPoint(new Ray(hitPoint.Position + n * 0.01f, L));
+                    bool occluded = !(shadowFeelerHitPoint == null || shadowFeelerHitPoint.Lambda > lightDistance);
                     Vector3 m = hitPoint.HitObject.Colour;
                     float nL = Vector3.Dot(n, L);
                     if(nL >= 0) {
                         // Diffuse shading TODO move this out of this method
                         Vector3 diffuse = Vector3.Multiply(lightSource.Colour.ToVector3(), m) * nL;
+                        if(occluded) diffuse *= 0.1f;
                         colour += new Colour(diffuse);
 
                         // Specular reflectance
-                        Vector3 eh = Vector3.Normalize(hitPoint.Position - ray.Origin);
-                        Vector3 r = Vector3.Normalize(2 * nL * n - L);
-                        Vector3 specular = lightSource.Colour.ToVector3() * (float)Math.Pow(Vector3.Dot(r, eh), 40); // TODO move k value out of here
-                        colour += new Colour(specular);
+                        if(!occluded) {
+                            Vector3 eh = Vector3.Normalize(hitPoint.Position - ray.Origin);
+                            Vector3 r = Vector3.Normalize(2 * nL * n - L);
+                            Vector3 specular = lightSource.Colour.ToVector3() * (float)Math.Pow(Vector3.Dot(r, eh), 40); // TODO move k value out of here
+                            colour += new Colour(specular);
+                        }
                     }
+
                 }
                 // Calculate reflection including fresnel effect
                 if(recursionDepth > 0) {
                     // TODO Don't do this if the object doesn't reflect anything.
-                    Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, Vector3.Reflect(ray.Direction, hitPoint.Normal));
+                    Vector3 reflectedDirection = Vector3.Reflect(ray.Direction, hitPoint.Normal);
+                    Ray reflectionRay = new Ray(hitPoint.Position + reflectedDirection * 0.001f, reflectedDirection);
                     Vector3 reflection = CalculateColour(reflectionRay, recursionDepth - 1);
                     Vector3 reflectiveness = hitPoint.HitObject.Reflectiveness;
                     Vector3 fresnel = reflectiveness + (Vector3.One - reflectiveness) * (float)Math.Pow(1 - Vector3.Dot(n, ray.Direction * (-1)), 5);
