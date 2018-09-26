@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Raytracing {
     public class Colour {
@@ -22,7 +23,16 @@ namespace Raytracing {
             this.B = b;
         }
 
-        public Colour(Vector3 colour) : this(colour.X, colour.Y, colour.Z) {
+        public Colour() : this(0, 0, 0) { }
+
+        public Colour(Vector3 colour) : this(colour.X, colour.Y, colour.Z) { }
+
+        public static Colour operator +(Colour a, Colour b) {
+            return new Colour(Math.Min(1, a.R + b.R), Math.Min(1, a.G + b.G), Math.Min(1, a.B + b.B));
+        }
+
+        public static Colour operator -(Colour a, Colour b) {
+            return new Colour(a.R - b.R, a.G - b.G, a.B - b.B);
         }
 
         public static implicit operator Vector3(Colour colour) {

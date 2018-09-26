@@ -4,18 +4,24 @@ using System.Numerics;
 namespace Raytracing {
     public class Scene {
         private List<ISceneObject> SceneObjects { get; }
-        public LightSource LightSource { get; set; } // TODO multiple light sources
+        private List<LightSource> LightSources { get; }
 
         public Scene() {
             this.SceneObjects = new List<ISceneObject>();
+            this.LightSources = new List<LightSource>();
         }
 
-        public Scene(ISceneObject sceneObject) : this() {
+        public Scene(ISceneObject sceneObject, LightSource lightSource) : this() {
             AddObject(sceneObject);
         }
 
-        public Scene(IEnumerable<ISceneObject> sceneObjects) : this() {
+        public Scene(IEnumerable<ISceneObject> sceneObjects, LightSource lightSource) : this() {
             AddObjects(sceneObjects);
+        }
+
+        public Scene(IEnumerable<ISceneObject> sceneObjects, IEnumerable<LightSource> lightSources) {
+            AddObjects(sceneObjects);
+            AddLightSources(lightSources);
         }
 
         public void AddObject(ISceneObject sceneObject) {
@@ -26,10 +32,18 @@ namespace Raytracing {
             SceneObjects.AddRange(sceneObjects);
         }
 
-        public HitPoint? FindClosestHitPoint(Ray ray) {
-            HitPoint? closestHitPoint = null;
+        public void AddLightSource(LightSource lightSource) {
+            LightSources.Add(lightSource);
+        }
+
+        public void AddLightSources(IEnumerable<LightSource> lightSources) {
+            LightSources.AddRange(lightSources);
+        }
+
+        public HitPoint FindClosestHitPoint(Ray ray) {
+            HitPoint closestHitPoint = null;
             foreach(ISceneObject sceneObject in SceneObjects) {
-                HitPoint? hitPoint = sceneObject.CalculateHitPoint(ray);
+                HitPoint hitPoint = sceneObject.CalculateHitPoint(ray);
                 if(hitPoint != null && (closestHitPoint == null || hitPoint?.Lambda < closestHitPoint?.Lambda)) {
                     closestHitPoint = hitPoint;
                 }
@@ -38,19 +52,21 @@ namespace Raytracing {
         }
 
         public Colour CalculateColour(Ray ray) {
-            HitPoint? potentialHitPoint = FindClosestHitPoint(ray);
-            if(potentialHitPoint.HasValue) {
-                HitPoint hitPoint = potentialHitPoint.Value;
-                Vector3 L = Vector3.Normalize(LightSource.Position - hitPoint.Position);
-                Vector3 n = hitPoint.Normal;
-                Vector3 m = hitPoint.HitObject.Colour; // TODO this should probably be in Sphere
-                float nL = Vector3.Dot(n, L);
-                if(nL >= 0) {
-                    return new Colour(Vector3.Multiply(LightSource.Colour.ToVector3(), m) * nL);
+            HitPoint hitPoint = FindClosestHitPoint(ray);
+            Colour colour = new Colour();
+            if(hitPoint != null) {
+                foreach(LightSource lightSource in LightSources) {
+                    Vector3 L = Vector3.Normalize(lightSource.Position - hitPoint.Position);
+                    Vector3 n = hitPoint.Normal;
+                    Vector3 m = hitPoint.HitObject.Colour; // TODO this should probably be in Sphere
+                    float nL = Vector3.Dot(n, L);
+                    if(nL >= 0) {
+                        colour += new Colour(Vector3.Multiply(lightSource.Colour.ToVector3(), m) * nL);
+                    }
                 }
             }
-            return Colour.Black;
-        } 
+            return colour;
+        }
 
         public static Scene CornellBox() {
             Scene cornellBox = new Scene();
@@ -63,7 +79,7 @@ namespace Raytracing {
                 new Sphere(new Vector3(-0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow),
                 new Sphere(new Vector3(0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan)
             });
-            cornellBox.LightSource = new LightSource(new Vector3(0, -0.9f, -0.5f), new Colour(1, 1, 1));
+            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.5f), new Colour(1, 1, 1)));
             return cornellBox;
         }
     }

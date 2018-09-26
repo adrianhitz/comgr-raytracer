@@ -13,7 +13,7 @@ namespace Raytracing {
             this.Colour = colour;
         }
 
-        public HitPoint? CalculateHitPoint(Ray ray) {
+        public HitPoint CalculateHitPoint(Ray ray) {
             Vector3 CE = ray.Origin - Centre;
             float a = 1;
             float b = 2 * Vector3.Dot(CE, ray.Direction);
