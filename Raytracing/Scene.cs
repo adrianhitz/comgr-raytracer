@@ -52,7 +52,8 @@ namespace Raytracing {
             return closestHitPoint;
         }
 
-        public Colour CalculateColour(Ray ray) {
+        // TODO clean this mess up
+        public Colour CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Colour colour = new Colour();
             if(hitPoint != null) {
@@ -72,6 +73,12 @@ namespace Raytracing {
                         Vector3 specular = lightSource.Colour.ToVector3() * (float)Math.Pow(Vector3.Dot(r, eh), 40);
                         colour += new Colour(specular);
                     }
+                }
+                // Calculate reflection
+                if(recursionDepth > 0) {
+                    Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, Vector3.Reflect(ray.Direction, hitPoint.Normal));
+                    Vector3 reflection = CalculateColour(reflectionRay, recursionDepth - 1);
+                    colour += new Colour(reflection * 0.2f);
                 }
             }
             return colour;
