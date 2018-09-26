@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Raytracing {
@@ -61,7 +62,15 @@ namespace Raytracing {
                     Vector3 m = hitPoint.HitObject.Colour;
                     float nL = Vector3.Dot(n, L);
                     if(nL >= 0) {
-                        colour += new Colour(Vector3.Multiply(lightSource.Colour.ToVector3(), m) * nL);
+                        // Diffuse shading TODO move this out of this method
+                        Vector3 diffuse = Vector3.Multiply(lightSource.Colour.ToVector3(), m) * nL;
+                        colour += new Colour(diffuse);
+
+                        // Specular reflectance
+                        Vector3 eh = Vector3.Normalize(hitPoint.Position - ray.Origin);
+                        Vector3 r = Vector3.Normalize(2 * nL * n - L);
+                        Vector3 specular = lightSource.Colour.ToVector3() * (float)Math.Pow(Vector3.Dot(r, eh), 40);
+                        colour += new Colour(specular);
                     }
                 }
             }
@@ -79,7 +88,7 @@ namespace Raytracing {
                 new Sphere(new Vector3(-0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow),
                 new Sphere(new Vector3(0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan)
             });
-            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.5f), new Colour(1, 1, 1)));
+            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, 0), new Colour(1, 1, 1)));
             return cornellBox;
         }
     }
