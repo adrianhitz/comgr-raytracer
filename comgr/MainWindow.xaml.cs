@@ -24,15 +24,15 @@ namespace comgr {
         public MainWindow() {
             InitializeComponent();
 
-            int width = 400;
-            int height = 400;
+            int width = 600;
+            int height = 600;
             Image image = new Image();
             WriteableBitmap writeableBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null); // TODO change to Bgr24
             image.Source = writeableBitmap; ;
             grid.Children.Add(image);
 
-            Raytracer raytracer = new Raytracer(Camera.CornellBoxCamera(), Scene.CornellBox(), width, height);
-            var pixels = raytracer.CalculatePixelsByteArray();
+            Raytracer raytracer = new Raytracer(Camera.CornellBoxCamera(), Scene.CornellBox());
+            var pixels = raytracer.CalculatePixelsByteArray(width, height);
             writeableBitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 4, 0);
         }
     }

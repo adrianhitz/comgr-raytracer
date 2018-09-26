@@ -4,22 +4,18 @@ namespace Raytracing {
     public class Raytracer {
         private Camera Camera { get; }
         private Scene Scene { get; }
-        public int Width;
-        public int Height;
 
-        public Raytracer(Camera camera, Scene scene, int width, int height) {
+        public Raytracer(Camera camera, Scene scene) {
             this.Camera = camera;
             this.Scene = scene;
-            this.Width = width; // TODO remove width and height as properties and instead pass them directly as arguments to CalculatePixels
-            this.Height = height;
         }
 
-        public Colour[,] CalculatePixels() {
-            Colour[,] pixels = new Colour[Width, Height];
+        public Colour[,] CalculatePixels(int width, int height) {
+            Colour[,] pixels = new Colour[width, height];
 
-            for(int x = 0; x < Width; x++) {
-                for(int y = 0; y < Height; y++) {
-                    Vector2 pixel = new Vector2((x / (float)(Width - 1)) * 2 - 1, (y / (float)(Height - 1 )) * 2 - 1);
+            for(int x = 0; x < width; x++) {
+                for(int y = 0; y < height; y++) {
+                    Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1 )) * 2 - 1);
                     Ray eyeRay = Camera.CreateEyeRay(pixel);
                     pixels[x, y] = Scene.CalculateColour(eyeRay);
                 }
@@ -27,10 +23,10 @@ namespace Raytracing {
             return pixels;
         }
 
-        public byte[] CalculatePixelsByteArray() {
-            Colour[,] pixels = CalculatePixels();
+        public byte[] CalculatePixelsByteArray(int width, int height) {
+            Colour[,] pixels = CalculatePixels(width, height);
             int stride = pixels.GetLength(0) * 4;
-            byte[] bytes = new byte[stride * Height];
+            byte[] bytes = new byte[stride * height];
             for(int y = 0; y < pixels.GetLength(0); y++) {
                 for(int x = 0; x < pixels.GetLength(1); x++) {
                     int i = (y * pixels.GetLength(0) + x) * 4;
