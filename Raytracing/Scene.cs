@@ -57,9 +57,9 @@ namespace Raytracing {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Colour colour = new Colour();
             if(hitPoint != null) {
+                Vector3 n = hitPoint.Normal;
                 foreach(LightSource lightSource in LightSources) {
                     Vector3 L = Vector3.Normalize(lightSource.Position - hitPoint.Position);
-                    Vector3 n = hitPoint.Normal;
                     Vector3 m = hitPoint.HitObject.Colour;
                     float nL = Vector3.Dot(n, L);
                     if(nL >= 0) {
@@ -74,13 +74,14 @@ namespace Raytracing {
                         colour += new Colour(specular);
                     }
                 }
-                // Calculate reflection
+                // Calculate reflection including fresnel effect
                 if(recursionDepth > 0) {
                     // TODO Don't do this if the object doesn't reflect anything.
                     Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, Vector3.Reflect(ray.Direction, hitPoint.Normal));
                     Vector3 reflection = CalculateColour(reflectionRay, recursionDepth - 1);
-
-                    colour += new Colour(Vector3.Multiply(reflection, hitPoint.HitObject.Reflectiveness));
+                    Vector3 reflectiveness = hitPoint.HitObject.Reflectiveness;
+                    Vector3 fresnel = reflectiveness + (Vector3.One - reflectiveness) * (float)Math.Pow(1 - Vector3.Dot(n, ray.Direction * (-1)), 5);
+                    colour += new Colour(reflection * fresnel);
                 }
             }
             return colour;
@@ -89,7 +90,7 @@ namespace Raytracing {
         public static Scene CornellBox() {
             Scene cornellBox = new Scene();
             Colour wallReflectiveness = new Colour(0.3f, 0.3f, 0.3f);
-            Colour sphereReflectiveness = new Colour(0.05f, 0.05f, 0.05f);
+            Colour sphereReflectiveness = new Colour(0.4f, 0.4f, 0.4f);
             cornellBox.AddObjects(new Sphere[] {
                 new Sphere(new Vector3(-1001, 0, 0), 1000, Colour.Red, wallReflectiveness),
                 new Sphere(new Vector3(1001, 0, 0), 1000, Colour.Blue, wallReflectiveness),
