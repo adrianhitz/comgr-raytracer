@@ -42,5 +42,9 @@ namespace Raytracing {
         public Vector3 ToVector3() {
             return new Vector3(R, G, B);
         }
+
+        public Vector3 ToSRGB(float lambda = 2.2f) {
+            return 255 * new Vector3((float)Math.Pow(R, 1 / lambda), (float)Math.Pow(G, 1 / lambda), (float)Math.Pow(B, 1 / lambda));
+        }
     }
 }

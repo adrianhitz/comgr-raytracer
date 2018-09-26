@@ -23,16 +23,17 @@ namespace Raytracing {
             return pixels;
         }
 
-        public byte[] CalculatePixelsByteArray(int width, int height) {
+        public byte[] CalculatePixelsByteArray(int width, int height, float lambda = 2.2f) {
             Colour[,] pixels = CalculatePixels(width, height);
             int stride = pixels.GetLength(0) * 3;
             byte[] bytes = new byte[stride * height];
             for(int y = 0; y < pixels.GetLength(0); y++) {
                 for(int x = 0; x < pixels.GetLength(1); x++) {
                     int i = (y * pixels.GetLength(0) + x) * 3;
-                    bytes[i] = (byte)(pixels[x, y].B * 255); // TODO move this calculation to class colour, also implement lambda correction
-                    bytes[i + 1] = (byte)(pixels[x, y].G * 255);
-                    bytes[i + 2] = (byte)(pixels[x, y].R * 255);
+                    Vector3 colourSRGB = pixels[x, y].ToSRGB(lambda);
+                    bytes[i] = (byte)(colourSRGB.Z);
+                    bytes[i + 1] = (byte)(colourSRGB.Y);
+                    bytes[i + 2] = (byte)(colourSRGB.X);
                 }
             }
             return bytes;

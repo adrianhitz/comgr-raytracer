@@ -58,7 +58,7 @@ namespace Raytracing {
                 foreach(LightSource lightSource in LightSources) {
                     Vector3 L = Vector3.Normalize(lightSource.Position - hitPoint.Position);
                     Vector3 n = hitPoint.Normal;
-                    Vector3 m = hitPoint.HitObject.Colour; // TODO this should probably be in Sphere
+                    Vector3 m = hitPoint.HitObject.Colour;
                     float nL = Vector3.Dot(n, L);
                     if(nL >= 0) {
                         colour += new Colour(Vector3.Multiply(lightSource.Colour.ToVector3(), m) * nL);
