@@ -76,9 +76,11 @@ namespace Raytracing {
                 }
                 // Calculate reflection
                 if(recursionDepth > 0) {
+                    // TODO Don't do this if the object doesn't reflect anything.
                     Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, Vector3.Reflect(ray.Direction, hitPoint.Normal));
                     Vector3 reflection = CalculateColour(reflectionRay, recursionDepth - 1);
-                    colour += new Colour(reflection * 0.2f);
+
+                    colour += new Colour(Vector3.Multiply(reflection, hitPoint.HitObject.Reflectiveness));
                 }
             }
             return colour;
@@ -86,14 +88,16 @@ namespace Raytracing {
 
         public static Scene CornellBox() {
             Scene cornellBox = new Scene();
+            Colour wallReflectiveness = new Colour(0.3f, 0.3f, 0.3f);
+            Colour sphereReflectiveness = new Colour(0.05f, 0.05f, 0.05f);
             cornellBox.AddObjects(new Sphere[] {
-                new Sphere(new Vector3(-1001, 0, 0), 1000, Colour.Red),
-                new Sphere(new Vector3(1001, 0, 0), 1000, Colour.Blue),
-                new Sphere(new Vector3(0, 0, 1001), 1000, Colour.White),
-                new Sphere(new Vector3(0, -1001, 0), 1000, Colour.White),
-                new Sphere(new Vector3(0, 1001, 0), 1000, Colour.White),
-                new Sphere(new Vector3(-0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow),
-                new Sphere(new Vector3(0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan)
+                new Sphere(new Vector3(-1001, 0, 0), 1000, Colour.Red, wallReflectiveness),
+                new Sphere(new Vector3(1001, 0, 0), 1000, Colour.Blue, wallReflectiveness),
+                new Sphere(new Vector3(0, 0, 1001), 1000, Colour.White, wallReflectiveness),
+                new Sphere(new Vector3(0, -1001, 0), 1000, Colour.White, wallReflectiveness),
+                new Sphere(new Vector3(0, 1001, 0), 1000, Colour.White, wallReflectiveness),
+                new Sphere(new Vector3(-0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow, sphereReflectiveness),
+                new Sphere(new Vector3(0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan, sphereReflectiveness)
             });
             cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, 0), new Colour(1, 1, 1)));
             return cornellBox;
