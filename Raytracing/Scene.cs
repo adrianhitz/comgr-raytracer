@@ -98,8 +98,8 @@ namespace Raytracing {
 
         public static Scene CornellBox() {
             Scene cornellBox = new Scene();
-            Colour wallReflectiveness = new Colour(0.3f, 0.3f, 0.3f);
-            Colour sphereReflectiveness = new Colour(0.4f, 0.4f, 0.4f);
+            Colour wallReflectiveness = new Colour(0.000001f, 0.000001f, 0.000001f);
+            Colour sphereReflectiveness = new Colour(0.04f, 0.04f, 0.04f);
             cornellBox.AddObjects(new Sphere[] {
                 new Sphere(new Vector3(-1001, 0, 0), 1000, Colour.Red, wallReflectiveness),
                 new Sphere(new Vector3(1001, 0, 0), 1000, Colour.Blue, wallReflectiveness),
