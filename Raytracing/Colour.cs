@@ -25,6 +25,8 @@ namespace Raytracing {
 
         public Colour() : this(0, 0, 0) { }
 
+        public Colour(float c) : this(c, c, c) { }
+
         public Colour(Vector3 colour) : this(colour.X, colour.Y, colour.Z) { }
 
         public static Colour operator +(Colour a, Colour b) {
@@ -37,6 +39,10 @@ namespace Raytracing {
 
         public static implicit operator Vector3(Colour colour) {
             return new Vector3(colour.R, colour.G, colour.B);
+        }
+
+        public static implicit operator Colour(Vector3 vector3) {
+            return new Colour(vector3);
         }
 
         public Vector3 ToVector3() {
