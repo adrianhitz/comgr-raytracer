@@ -13,5 +13,12 @@ namespace Raytracing {
             this.Normal = normal;
             this.HitObject = hitObject;
         }
+
+        internal Colour Diffuse(LightSource lightSource) {
+            Vector3 L = Vector3.Normalize(lightSource.Position - this.Position);
+            float nL = Vector3.Dot(this.Normal, L);
+            Colour diffuse = Colour.Black;
+            return nL >= 0 ? (Colour)(Vector3.Multiply(lightSource.Colour, this.HitObject.Colour) * nL) : Colour.Black;
+        }
     }
 }
