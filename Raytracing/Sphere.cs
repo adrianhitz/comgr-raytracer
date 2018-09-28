@@ -20,6 +20,7 @@ namespace Raytracing {
         }
 
         public Sphere(Vector3 centre, float r, Colour colour) : this(centre, r, colour, new Colour(0, 0, 0), new Colour(0, 0, 0), new Colour(0, 0, 0)) { }
+        public Sphere(Vector3 centre, float r, Colour colour, Colour specular, Colour reflective) : this(centre, r, colour, specular, reflective, new Colour(0, 0, 0)) { }
 
         public HitPoint CalculateHitPoint(Ray ray) {
             Vector3 CE = ray.Origin - Centre;
