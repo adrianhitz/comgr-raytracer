@@ -6,16 +6,20 @@ namespace Raytracing {
         public Vector3 Centre { get; }
         public float R { get; }
         public Colour Colour { get; }
-        public Colour Reflectiveness { get; }
+        public Colour Specular { get; }
+        public Colour Reflective { get; }
+        public Colour Emissive { get; }
 
-        public Sphere(Vector3 centre, float r, Colour colour, Colour reflectiveness) {
+        public Sphere(Vector3 centre, float r, Colour colour, Colour specular, Colour reflective, Colour emissive) {
             this.Centre = centre;
             this.R = r;
             this.Colour = colour;
-            this.Reflectiveness = reflectiveness;
+            this.Specular = specular;
+            this.Reflective = reflective;
+            this.Emissive = emissive;
         }
 
-        public Sphere(Vector3 centre, float r, Colour colour) : this(centre, r, colour, new Colour(0, 0, 0)) { }
+        public Sphere(Vector3 centre, float r, Colour colour) : this(centre, r, colour, new Colour(0, 0, 0), new Colour(0, 0, 0), new Colour(0, 0, 0)) { }
 
         public HitPoint CalculateHitPoint(Ray ray) {
             Vector3 CE = ray.Origin - Centre;
@@ -31,12 +35,7 @@ namespace Raytracing {
                 if(solution1 < 0 && solution2 < 0) {
                     return null;
                 } else {
-                    float lambda;
-                    if(solution1 >= 0 && solution2 >= 0) {
-                        lambda = Math.Min(solution1, solution2);
-                    } else {
-                        lambda = Math.Max(solution1, solution2);
-                    }
+                    float lambda = solution1 >= 0 && solution2 >= 0 ? Math.Min(solution1, solution2) : Math.Max(solution1, solution2);
                     Vector3 hitPointPosition = ray.Origin + lambda * ray.Direction;
                     Vector3 normal = Vector3.Normalize(hitPointPosition - Centre);
                     return new HitPoint(lambda, hitPointPosition, normal, this);
