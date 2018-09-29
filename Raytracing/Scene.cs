@@ -6,6 +6,17 @@ namespace Raytracing {
     public class Scene {
         private List<ISceneObject> SceneObjects { get; }
         private List<LightSource> LightSources { get; }
+        public int PhongK { get; set; } = 40;
+        private Colour ambientLight = Colour.Black;
+        public Colour AmbientLight {
+            get => ambientLight;
+            set => ambientLight = new Colour(Math.Min(Math.Max(value.R, 0), 1), Math.Min(Math.Max(value.G, 0), 1), Math.Min(Math.Max(value.B, 0), 1));
+        }
+        private float shadowBrightness = 0.1f;
+        public float ShadowBrightness {
+            get => shadowBrightness;
+            set => shadowBrightness = Math.Min(Math.Max(value, 0), 1);
+        }
 
         public Scene() {
             this.SceneObjects = new List<ISceneObject>();
@@ -52,30 +63,21 @@ namespace Raytracing {
             return closestHitPoint;
         }
 
-        // TODO clean this mess up
         // TODO doesn't work with recursionDepth > 1
         public Colour CalculateColour(Ray ray, int recursionDepth = 3) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
-            Colour colour = new Colour();
+            Colour colour = AmbientLight;
             if(hitPoint != null) {
-                Vector3 n = hitPoint.Normal; // TODO remove?
                 foreach(LightSource lightSource in LightSources) {
-                    Vector3 L = Vector3.Normalize(lightSource.Position - hitPoint.Position); // TODO remove?
                     bool occluded = IsOccluded(hitPoint, lightSource);
-
-                    Vector3 m = hitPoint.HitObject.Colour; // TODO remove?
-                    float nL = Vector3.Dot(n, L); // TODO remove?
 
                     // Diffuse reflection
                     Colour diffuse = hitPoint.Diffuse(lightSource);
-                    if(occluded) diffuse *= 0.1f; // TODO make a property or something out of this literal
+                    if(occluded) diffuse *= shadowBrightness;
                     colour += diffuse;
 
                     // Phong reflection
-                    if(!occluded) {
-                        Vector3 phong = hitPoint.Phong(lightSource, ray.Origin, 40); // TODO move k value out of here
-                        colour += new Colour(phong);
-                    }
+                    if(!occluded) colour += new Colour(hitPoint.Phong(lightSource, ray.Origin, PhongK));
                 }
                 // Regular reflection including fresnel
                 if(recursionDepth > 0 && !hitPoint.HitObject.Reflective.Equals(Colour.Black)) {
