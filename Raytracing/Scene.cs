@@ -78,16 +78,21 @@ namespace Raytracing {
                     }
                 }
                 // Regular reflection including fresnel
-                if(recursionDepth > 0 && hitPoint.HitObject.Reflective != Colour.Black) {
-                    Vector3 reflectedDirection = Vector3.Normalize(Vector3.Reflect(ray.Direction, hitPoint.Normal));
-                    Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, reflectedDirection);
-                    Vector3 reflection = CalculateColour(reflectionRay, recursionDepth - 1);
-                    Vector3 reflectiveness = hitPoint.HitObject.Reflective;
-                    Vector3 fresnel = reflectiveness + (Vector3.One - reflectiveness) * (float)Math.Pow(1 - Vector3.Dot(n, Vector3.Reflect(ray.Direction, n)), 5);
+                if(recursionDepth > 0 && !hitPoint.HitObject.Reflective.Equals(Colour.Black)) {
+                    Vector3 reflection = CalculateReflection(ray, hitPoint, recursionDepth - 1);
+                    Vector3 fresnel = hitPoint.Fresnel(ray);
                     colour += new Colour(reflection * fresnel);
                 }
             }
             return colour;
+        }
+
+        private Colour CalculateReflection(Ray ray, HitPoint hitPoint, int recursionDepth) {
+            Vector3 reflectedDirection = Vector3.Normalize(Vector3.Reflect(ray.Direction, hitPoint.Normal));
+            Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, reflectedDirection);
+            return CalculateColour(reflectionRay, recursionDepth - 1);
+
+
         }
 
         private bool IsOccluded(HitPoint hitPoint, LightSource lightSource) {
