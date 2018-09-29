@@ -49,6 +49,10 @@ namespace Raytracing {
             return new Colour(vector3);
         }
 
+        public override bool Equals(object obj) {
+            return obj == null ? false : !(obj is Colour c) ? false : (R == c.R) && (B == c.B) && (G == c.G);
+        }
+
         public Vector3 ToVector3() {
             return new Vector3(R, G, B);
         }
