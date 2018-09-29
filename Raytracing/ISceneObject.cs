@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Raytracing {
+﻿namespace Raytracing {
     public interface ISceneObject {
         Colour Colour { get; }
         Colour Specular { get; }
