@@ -29,5 +29,10 @@ namespace Raytracing {
             Vector3 r = Vector3.Normalize(2 * nL * this.Normal - L);
             return nL >= 0 ? lightSource.Colour * (float)Math.Pow(Vector3.Dot(r, eh), k) : Colour.Black;
         }
+
+        internal Vector3 Fresnel(Ray ray) {
+            return (Vector3)this.HitObject.Reflective + (Vector3.One - (Vector3)this.HitObject.Reflective)
+                * (float)Math.Pow(1 - Vector3.Dot(this.Normal, Vector3.Reflect(ray.Direction, this.Normal)), 5);
+        }
     }
 }
