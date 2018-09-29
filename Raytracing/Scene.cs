@@ -71,19 +71,14 @@ namespace Raytracing {
                     if(occluded) diffuse *= 0.1f; // TODO make a property or something out of this literal
                     colour += diffuse;
 
-                    if(nL >= 0) {
-                        // Specular reflectance TODO move out of this method
-                        if(!occluded) {
-                            Vector3 eh = Vector3.Normalize(hitPoint.Position - ray.Origin);
-                            Vector3 r = Vector3.Normalize(2 * nL * n - L);
-                            Vector3 specular = lightSource.Colour.ToVector3() * (float)Math.Pow(Vector3.Dot(r, eh), 40); // TODO move k value out of here
-                            colour += new Colour(specular);
-                        }
+                    // Phong reflection
+                    if(!occluded) {
+                        Vector3 phong = hitPoint.Phong(lightSource, ray.Origin, 40); // TODO move k value out of here
+                        colour += new Colour(phong);
                     }
                 }
-                // Calculate reflection including fresnel effect
+                // Regular reflection including fresnel
                 if(recursionDepth > 0 && hitPoint.HitObject.Reflective != Colour.Black) {
-                    // TODO Don't do this if the object doesn't reflect anything.
                     Vector3 reflectedDirection = Vector3.Normalize(Vector3.Reflect(ray.Direction, hitPoint.Normal));
                     Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, reflectedDirection);
                     Vector3 reflection = CalculateColour(reflectionRay, recursionDepth - 1);
