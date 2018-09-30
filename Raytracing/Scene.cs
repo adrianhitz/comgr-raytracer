@@ -6,6 +6,7 @@ namespace Raytracing {
     public class Scene {
         private List<ISceneObject> SceneObjects { get; }
         private List<LightSource> LightSources { get; }
+        private static readonly float HIT_POINT_ADJUSTMENT = 0.01f;
         public int PhongK { get; set; } = 40;
         private Colour ambientLight = Colour.Black;
         public Colour AmbientLight {
@@ -63,13 +64,12 @@ namespace Raytracing {
             return closestHitPoint;
         }
 
-        // TODO doesn't work with recursionDepth > 1
-        public Colour CalculateColour(Ray ray, int recursionDepth = 3) {
+        public Colour CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Colour colour = AmbientLight;
             if(hitPoint != null) {
                 foreach(LightSource lightSource in LightSources) {
-                    bool occluded = IsOccluded(hitPoint, lightSource);
+                    bool occluded = IsOccluded(ray, hitPoint, lightSource);
 
                     // Diffuse reflection
                     Colour diffuse = hitPoint.Diffuse(lightSource);
@@ -90,16 +90,16 @@ namespace Raytracing {
         }
 
         private Colour CalculateReflection(Ray ray, HitPoint hitPoint, int recursionDepth) {
+            Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             Vector3 reflectedDirection = Vector3.Normalize(Vector3.Reflect(ray.Direction, hitPoint.Normal));
-            Ray reflectionRay = new Ray(hitPoint.Position + hitPoint.Normal * 0.1f, reflectedDirection);
-            return CalculateColour(reflectionRay, recursionDepth - 1);
-
-
+            Ray reflectionRay = new Ray(adjustedPosition, reflectedDirection);
+            return CalculateColour(reflectionRay, recursionDepth);
         }
 
-        private bool IsOccluded(HitPoint hitPoint, LightSource lightSource) {
-            Vector3 L = lightSource.Position - hitPoint.Position;
-            Ray shadowFeeler = new Ray(hitPoint.Position + hitPoint.Normal * 0.001f, L);
+        private bool IsOccluded(Ray ray, HitPoint hitPoint, LightSource lightSource) {
+            Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
+            Vector3 L = lightSource.Position - adjustedPosition;
+            Ray shadowFeeler = new Ray(adjustedPosition, L);
             HitPoint feelerHitPoint = FindClosestHitPoint(shadowFeeler);
             return feelerHitPoint != null && feelerHitPoint.Lambda <= L.Length();
         }
