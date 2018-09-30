@@ -4,6 +4,7 @@ namespace Raytracing {
     public class Raytracer {
         private Camera Camera { get; }
         private Scene Scene { get; }
+        public int RecursionDepth { get; set; } = 3;
 
         public Raytracer(Camera camera, Scene scene) {
             this.Camera = camera;
@@ -17,7 +18,7 @@ namespace Raytracing {
                 for(int y = 0; y < height; y++) {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1 )) * 2 - 1);
                     Ray eyeRay = Camera.CreateEyeRay(pixel);
-                    pixels[x, y] = Scene.CalculateColour(eyeRay);
+                    pixels[x, y] = Scene.CalculateColour(eyeRay, RecursionDepth);
                 }
             }
             return pixels;
