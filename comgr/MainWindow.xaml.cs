@@ -28,7 +28,7 @@ namespace comgr {
             int height = 1000;
             Image image = new Image();
             WriteableBitmap writeableBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr24, null);
-            image.Source = writeableBitmap; ;
+            image.Source = writeableBitmap;
             grid.Children.Add(image);
 
             Raytracer raytracer = new Raytracer(Camera.CornellBoxCamera(), Scene.CornellBox());
