@@ -39,7 +39,7 @@ namespace Raytracing {
         }
 
         public static Colour operator *(Colour a, float b) {
-            return new Colour(a.R * b, a.B * b, a.G * b);
+            return new Colour(a.R * b, a.G * b, a.B * b);
         }
 
         public static implicit operator Vector3(Colour colour) {
