@@ -67,6 +67,7 @@ namespace Raytracing {
         public Colour CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Colour colour = AmbientLight;
+            colour += hitPoint.HitObject.Emissive;
             if(hitPoint != null) {
                 foreach(LightSource lightSource in LightSources) {
                     bool occluded = IsOccluded(ray, hitPoint, lightSource);
