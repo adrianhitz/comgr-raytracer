@@ -3,9 +3,9 @@
 namespace Raytracing {
     public class LightSource {
         public Vector3 Position { get; }
-        public Colour Colour { get; }
+        public Vector3 Colour { get; }
 
-        public LightSource(Vector3 position, Colour colour) {
+        public LightSource(Vector3 position, Vector3 colour) {
             this.Position = position;
             this.Colour = colour;
         }

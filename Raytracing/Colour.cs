@@ -4,62 +4,14 @@ using System.Numerics;
 // TODO this whole thing is probably unnecessary, should be converted into extension methods for Vector3?
 namespace Raytracing {
     public class Colour {
-        public float R { get; }
-        public float G { get; }
-        public float B { get; }
-
-        public static readonly Colour Black = new Colour(0, 0, 0);
-        public static readonly Colour Red = new Colour(1, 0, 0);
-        public static readonly Colour Green = new Colour(0, 1, 0);
-        public static readonly Colour Blue = new Colour(0, 0, 1);
-        public static readonly Colour Yellow = new Colour(1, 1, 0);
-        public static readonly Colour Magenta = new Colour(1, 0, 1);
-        public static readonly Colour Cyan = new Colour(0, 1, 1);
-        public static readonly Colour White = new Colour(1, 1, 1);
-        public static readonly Colour LightCyan = new Colour(0.8f, 1, 1);
-
-        public Colour(float r, float g, float b) {
-            this.R = r;
-            this.G = g;
-            this.B = b;
-        }
-
-        public Colour() : this(0, 0, 0) { }
-
-        public Colour(float c) : this(c, c, c) { }
-
-        public Colour(Vector3 colour) : this(colour.X, colour.Y, colour.Z) { }
-
-        public static Colour operator +(Colour a, Colour b) {
-            return new Colour(Math.Min(1, a.R + b.R), Math.Min(1, a.G + b.G), Math.Min(1, a.B + b.B));
-        }
-
-        public static Colour operator -(Colour a, Colour b) {
-            return new Colour(a.R - b.R, a.G - b.G, a.B - b.B);
-        }
-
-        public static Colour operator *(Colour a, float b) {
-            return new Colour(a.R * b, a.G * b, a.B * b);
-        }
-
-        public static implicit operator Vector3(Colour colour) {
-            return new Vector3(colour.R, colour.G, colour.B);
-        }
-
-        public static implicit operator Colour(Vector3 vector3) {
-            return new Colour(vector3);
-        }
-
-        public override bool Equals(object obj) {
-            return obj == null ? false : !(obj is Colour c) ? false : (R == c.R) && (B == c.B) && (G == c.G);
-        }
-
-        public Vector3 ToVector3() {
-            return new Vector3(R, G, B);
-        }
-
-        public Vector3 ToSRGB(float lambda = 2.2f) {
-            return 255 * new Vector3((float)Math.Pow(R, 1 / lambda), (float)Math.Pow(G, 1 / lambda), (float)Math.Pow(B, 1 / lambda));
-        }
+        public static readonly Vector3 Black = new Vector3(0, 0, 0);
+        public static readonly Vector3 Red = new Vector3(1, 0, 0);
+        public static readonly Vector3 Green = new Vector3(0, 1, 0);
+        public static readonly Vector3 Blue = new Vector3(0, 0, 1);
+        public static readonly Vector3 Yellow = new Vector3(1, 1, 0);
+        public static readonly Vector3 Magenta = new Vector3(1, 0, 1);
+        public static readonly Vector3 Cyan = new Vector3(0, 1, 1);
+        public static readonly Vector3 White = new Vector3(1, 1, 1);
+        public static readonly Vector3 LightCyan = new Vector3(0.8f, 1, 1);
     }
 }

@@ -8,10 +8,10 @@ namespace Raytracing {
         private List<LightSource> LightSources { get; }
         private static readonly float HIT_POINT_ADJUSTMENT = 0.01f;
         public int PhongK { get; set; } = 40;
-        private Colour ambientLight = Colour.Black;
-        public Colour AmbientLight {
+        private Vector3 ambientLight = Colour.Black;
+        public Vector3 AmbientLight {
             get => ambientLight;
-            set => ambientLight = new Colour(Math.Min(Math.Max(value.R, 0), 1), Math.Min(Math.Max(value.G, 0), 1), Math.Min(Math.Max(value.B, 0), 1));
+            set => ambientLight = new Vector3(Math.Min(Math.Max(value.X, 0), 1), Math.Min(Math.Max(value.Y, 0), 1), Math.Min(Math.Max(value.Z, 0), 1));
         }
         private float shadowBrightness = 0.1f;
         public float ShadowBrightness {
@@ -64,33 +64,33 @@ namespace Raytracing {
             return closestHitPoint;
         }
 
-        public Colour CalculateColour(Ray ray, int recursionDepth = 1) {
+        public Vector3 CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
-            Colour colour = AmbientLight;
+            Vector3 colour = AmbientLight;
             colour += hitPoint.HitObject.Emissive;
             if(hitPoint != null) {
                 foreach(LightSource lightSource in LightSources) {
                     bool occluded = IsOccluded(ray, hitPoint, lightSource);
 
                     // Diffuse reflection
-                    Colour diffuse = hitPoint.Diffuse(lightSource);
+                    Vector3 diffuse = hitPoint.Diffuse(lightSource);
                     if(occluded) diffuse *= shadowBrightness;
                     colour += diffuse;
 
                     // Phong reflection
-                    if(!occluded) colour += new Colour(hitPoint.Phong(lightSource, ray.Origin, PhongK));
+                    if(!occluded) colour += hitPoint.Phong(lightSource, ray.Origin, PhongK);
                 }
                 // Regular reflection including fresnel
                 if(recursionDepth > 0 && !hitPoint.HitObject.Reflective.Equals(Colour.Black)) {
                     Vector3 reflection = CalculateReflection(ray, hitPoint, recursionDepth - 1);
                     Vector3 fresnel = hitPoint.Fresnel(ray);
-                    colour += new Colour(reflection * fresnel * hitPoint.HitObject.Reflective);
+                    colour += reflection * fresnel * hitPoint.HitObject.Reflective;
                 }
             }
             return colour;
         }
 
-        private Colour CalculateReflection(Ray ray, HitPoint hitPoint, int recursionDepth) {
+        private Vector3 CalculateReflection(Ray ray, HitPoint hitPoint, int recursionDepth) {
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             Vector3 reflectedDirection = Vector3.Normalize(Vector3.Reflect(ray.Direction, hitPoint.Normal));
             Ray reflectionRay = new Ray(adjustedPosition, reflectedDirection);
@@ -107,10 +107,10 @@ namespace Raytracing {
 
         public static Scene CornellBox() {
             Scene cornellBox = new Scene();
-            Colour specularWall = new Colour(0, 0, 0);
-            Colour specularSphere = new Colour(1, 1, 1);
-            Colour wallReflectiveness = new Colour(0.05f, 0.05f, 0.05f);
-            Colour sphereReflectiveness = new Colour(0.4f, 0.4f, 0.4f);
+            Vector3 specularWall = new Vector3(0, 0, 0);
+            Vector3 specularSphere = new Vector3(1, 1, 1);
+            Vector3 wallReflectiveness = new Vector3(0.05f, 0.05f, 0.05f);
+            Vector3 sphereReflectiveness = new Vector3(0.4f, 0.4f, 0.4f);
             cornellBox.AddObjects(new Sphere[] {
                 new Sphere(new Vector3(1001, 0, 0), 1000, Colour.Red, specularWall, wallReflectiveness),
                 new Sphere(new Vector3(-1001, 0, 0), 1000, Colour.Blue, specularWall, wallReflectiveness),
@@ -121,9 +121,9 @@ namespace Raytracing {
                 new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow, specularWall, sphereReflectiveness),
                 new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan, specularWall, sphereReflectiveness)
             });
-            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.3f), new Colour(0.15f, 0.7f, 0.15f)));
-            cornellBox.AddLightSource(new LightSource(new Vector3(0.4f, -0.9f, 0.3f), new Colour(0.7f, 0.15f, 0.15f)));
-            cornellBox.AddLightSource(new LightSource(new Vector3(-0.4f, -0.9f, 0.3f), new Colour(0.15f, 0.15f, 0.7f)));
+            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.3f), new Vector3(0.15f, 0.7f, 0.15f)));
+            cornellBox.AddLightSource(new LightSource(new Vector3(0.4f, -0.9f, 0.3f), new Vector3(0.7f, 0.15f, 0.15f)));
+            cornellBox.AddLightSource(new LightSource(new Vector3(-0.4f, -0.9f, 0.3f), new Vector3(0.15f, 0.15f, 0.7f)));
             return cornellBox;
         }
     }

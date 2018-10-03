@@ -11,8 +11,8 @@ namespace Raytracing {
             this.Scene = scene;
         }
 
-        public Colour[,] CalculatePixels(int width, int height) {
-            Colour[,] pixels = new Colour[width, height];
+        public Vector3[,] CalculatePixels(int width, int height) {
+            Vector3[,] pixels = new Vector3[width, height];
 
             for(int x = 0; x < width; x++) {
                 for(int y = 0; y < height; y++) {
@@ -25,7 +25,7 @@ namespace Raytracing {
         }
 
         public byte[] CalculatePixelsByteArray(int width, int height, float lambda = 2.2f) {
-            Colour[,] pixels = CalculatePixels(width, height);
+            Vector3[,] pixels = CalculatePixels(width, height);
             int stride = pixels.GetLength(0) * 3;
             byte[] bytes = new byte[stride * height];
             for(int y = 0; y < pixels.GetLength(0); y++) {

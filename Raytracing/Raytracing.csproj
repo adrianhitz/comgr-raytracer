@@ -53,6 +53,7 @@
     <Compile Include="Raytracer.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Sphere.cs" />
+    <Compile Include="Vector3Extensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

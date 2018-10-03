@@ -15,14 +15,14 @@ namespace Raytracing {
             this.HitObject = hitObject;
         }
 
-        internal Colour Diffuse(LightSource lightSource) {
+        internal Vector3 Diffuse(LightSource lightSource) {
             Vector3 L = Vector3.Normalize(lightSource.Position - this.Position);
             float nL = Vector3.Dot(this.Normal, L);
-            Colour diffuse = Colour.Black;
-            return nL >= 0 ? (Colour)(Vector3.Multiply(lightSource.Colour, this.HitObject.Colour) * nL) : Colour.Black;
+            Vector3 diffuse = Colour.Black;
+            return nL >= 0 ? (Vector3.Multiply(lightSource.Colour, this.HitObject.Diffuse) * nL) : Colour.Black;
         }
 
-        internal Colour Phong(LightSource lightSource, Vector3 cameraPosition, int k = 40) {
+        internal Vector3 Phong(LightSource lightSource, Vector3 cameraPosition, int k = 40) {
             Vector3 L = Vector3.Normalize(lightSource.Position - this.Position); // TODO maybe move this calculation out of the method because it's repeated in other methods
             float nL = Vector3.Dot(this.Normal, L);
             Vector3 eh = Vector3.Normalize(this.Position - cameraPosition);
