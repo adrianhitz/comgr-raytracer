@@ -16,7 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Raytracing;
 
-namespace comgr {
+namespace Comgr {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
