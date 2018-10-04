@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "comgr", "comgr\comgr.csproj", "{57DB4530-9FA3-468E-8E4B-E5900A801600}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comgr", "comgr\Comgr.csproj", "{57DB4530-9FA3-468E-8E4B-E5900A801600}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raytracing", "Raytracing\Raytracing.csproj", "{5CE8E421-6FD1-4BDD-BB33-670EB5C9EC3C}"
 EndProject
