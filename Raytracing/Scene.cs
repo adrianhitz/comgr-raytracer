@@ -67,7 +67,7 @@ namespace Raytracing {
         public Vector3 CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Vector3 colour = AmbientLight;
-            colour += hitPoint.HitObject.Emissive;
+            colour += hitPoint.HitObject.Material.Emissive;
             if(hitPoint != null) {
                 foreach(LightSource lightSource in LightSources) {
                     bool occluded = IsOccluded(ray, hitPoint, lightSource);
@@ -81,10 +81,10 @@ namespace Raytracing {
                     if(!occluded) colour += hitPoint.Phong(lightSource, ray.Origin, PhongK);
                 }
                 // Regular reflection including fresnel
-                if(recursionDepth > 0 && !hitPoint.HitObject.Reflective.Equals(Colour.Black)) {
+                if(recursionDepth > 0 && !hitPoint.HitObject.Material.Reflective.Equals(Colour.Black)) {
                     Vector3 reflection = CalculateReflection(ray, hitPoint, recursionDepth - 1);
                     Vector3 fresnel = hitPoint.Fresnel(ray);
-                    colour += reflection * fresnel * hitPoint.HitObject.Reflective;
+                    colour += reflection * fresnel * hitPoint.HitObject.Material.Reflective;
                 }
             }
             return colour;
@@ -110,20 +110,21 @@ namespace Raytracing {
             Vector3 specularWall = new Vector3(0, 0, 0);
             Vector3 specularSphere = new Vector3(1, 1, 1);
             Vector3 wallReflectiveness = new Vector3(0.05f, 0.05f, 0.05f);
-            Vector3 sphereReflectiveness = new Vector3(0.4f, 0.4f, 0.4f);
+            Vector3 sphereReflectiveness = new Vector3(0.1f, 0.1f, 0.1f);
+            Material whiteWall = new Material(Colour.White, specularWall, wallReflectiveness);
             cornellBox.AddObjects(new Sphere[] {
-                new Sphere(new Vector3(1001, 0, 0), 1000, Colour.Red, specularWall, wallReflectiveness),
-                new Sphere(new Vector3(-1001, 0, 0), 1000, Colour.Blue, specularWall, wallReflectiveness),
-                new Sphere(new Vector3(0, 0, 1001), 1000, Colour.White, specularWall, wallReflectiveness),
-                new Sphere(new Vector3(0, -1001, 0), 1000, Colour.White, specularWall, wallReflectiveness),
-                new Sphere(new Vector3(0, 1001, 0), 1000, Colour.White, specularWall, wallReflectiveness),
-                new Sphere(new Vector3(0, 0, -1005), 1000, Colour.White, specularWall, wallReflectiveness),
-                new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, Colour.Yellow, specularWall, sphereReflectiveness),
-                new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, Colour.LightCyan, specularWall, sphereReflectiveness)
+                new Sphere(new Vector3(1001, 0, 0), 1000, new Material(Colour.Red, specularWall, wallReflectiveness)),
+                new Sphere(new Vector3(-1001, 0, 0), 1000, new Material(Colour.Blue, specularWall, wallReflectiveness)),
+                new Sphere(new Vector3(0, 0, 1001), 1000, whiteWall),
+                new Sphere(new Vector3(0, -1001, 0), 1000, whiteWall),
+                new Sphere(new Vector3(0, 1001, 0), 1000, whiteWall),
+                new Sphere(new Vector3(0, 0, -1005), 1000,whiteWall),
+                new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, new Material(Colour.Yellow, specularSphere, sphereReflectiveness), new Texture(@"Resources\pluto.jpg", rotationOffset: 0.8f*(float)Math.PI)),
+                new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, specularSphere, sphereReflectiveness), new Texture(@"Resources\earth.jpg", rotationOffset: 1.2f*(float)Math.PI))
             });
-            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.3f), new Vector3(0.15f, 0.7f, 0.15f)));
-            cornellBox.AddLightSource(new LightSource(new Vector3(0.4f, -0.9f, 0.3f), new Vector3(0.7f, 0.15f, 0.15f)));
-            cornellBox.AddLightSource(new LightSource(new Vector3(-0.4f, -0.9f, 0.3f), new Vector3(0.15f, 0.15f, 0.7f)));
+            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.6f), new Vector3(0.15f, 0.7f, 0.15f)));
+            cornellBox.AddLightSource(new LightSource(new Vector3(0.4f, -0.9f, 0f), new Vector3(0.7f, 0.15f, 0.15f)));
+            cornellBox.AddLightSource(new LightSource(new Vector3(-0.4f, -0.9f, 0f), new Vector3(0.15f, 0.15f, 0.7f)));
             return cornellBox;
         }
     }

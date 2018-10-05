@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
     <Reference Include="System.Xml.Linq" />
@@ -48,12 +49,24 @@
     <Compile Include="LightSource.cs" />
     <Compile Include="Colour.cs" />
     <Compile Include="ISceneObject.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Raytracer.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Sphere.cs" />
+    <Compile Include="Texture.cs" />
     <Compile Include="Vector3Extensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\earth.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\pluto.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

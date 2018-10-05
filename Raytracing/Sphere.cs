@@ -5,22 +5,15 @@ namespace Raytracing {
     public class Sphere : ISceneObject {
         public Vector3 Centre { get; }
         public float R { get; }
-        public Vector3 Diffuse { get; }
-        public Vector3 Specular { get; }
-        public Vector3 Reflective { get; }
-        public Vector3 Emissive { get; }
+        public Material Material { get; }
+        public Texture Texture { get; }
 
-        public Sphere(Vector3 centre, float r, Vector3 colour, Vector3 specular, Vector3 reflective, Vector3 emissive) {
+        public Sphere(Vector3 centre, float r, Material material, Texture texture = null) {
             this.Centre = centre;
             this.R = r;
-            this.Diffuse = colour;
-            this.Specular = specular;
-            this.Reflective = reflective;
-            this.Emissive = emissive;
+            this.Material = material;
+            this.Texture = texture;
         }
-
-        public Sphere(Vector3 centre, float r, Vector3 colour) : this(centre, r, colour, Colour.Black, Colour.Black, Colour.Black) { }
-        public Sphere(Vector3 centre, float r, Vector3 colour, Vector3 specular, Vector3 reflective) : this(centre, r, colour, specular, reflective, Raytracing.Colour.Black) { }
 
         public HitPoint CalculateHitPoint(Ray ray) {
             Vector3 CE = ray.Origin - Centre;

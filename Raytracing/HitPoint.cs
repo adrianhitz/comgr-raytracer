@@ -18,8 +18,8 @@ namespace Raytracing {
         internal Vector3 Diffuse(LightSource lightSource) {
             Vector3 L = Vector3.Normalize(lightSource.Position - this.Position);
             float nL = Vector3.Dot(this.Normal, L);
-            Vector3 diffuse = Colour.Black;
-            return nL >= 0 ? (Vector3.Multiply(lightSource.Colour, this.HitObject.Diffuse) * nL) : Colour.Black;
+            Vector3 diffuse = this.HitObject.Texture != null ? this.GetTextureColour() : this.HitObject.Material.Diffuse;
+            return nL >= 0 ? (Vector3.Multiply(lightSource.Colour, diffuse) * nL) : Colour.Black;
         }
 
         internal Vector3 Phong(LightSource lightSource, Vector3 cameraPosition, int k = 40) {
@@ -31,8 +31,14 @@ namespace Raytracing {
         }
 
         internal Vector3 Fresnel(Ray ray) {
-            return (Vector3)this.HitObject.Reflective + (Vector3.One - (Vector3)this.HitObject.Reflective)
+            return (Vector3)this.HitObject.Material.Reflective + (Vector3.One - (Vector3)this.HitObject.Material.Reflective)
                 * (float)Math.Pow(1 - Vector3.Dot(this.Normal, Vector3.Reflect(ray.Direction, this.Normal)), 5);
+        }
+
+        private Vector3 GetTextureColour() {
+            float s = (float)Math.Atan2(this.Normal.X, this.Normal.Z) / (2 * (float)Math.PI) + 0.5f;
+            float t = ((float)Math.Acos(this.Normal.Y)) / (float)Math.PI;
+            return this.HitObject.Texture.GetPixel(s, t);
         }
     }
 }

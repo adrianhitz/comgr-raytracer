@@ -24,16 +24,17 @@ namespace Comgr {
         public MainWindow() {
             InitializeComponent();
 
-            int width = 1000;
-            int height = 1000;
+            int size = 1000;
             Image image = new Image();
-            WriteableBitmap writeableBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr24, null);
+            WriteableBitmap writeableBitmap = new WriteableBitmap(size, size, 96, 96, PixelFormats.Bgr24, null);
             image.Source = writeableBitmap;
             grid.Children.Add(image);
 
-            Raytracer raytracer = new Raytracer(Camera.CornellBoxCamera(), Scene.CornellBox());
-            var pixels = raytracer.CalculatePixelsByteArray(width, height);
-            writeableBitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 3, 0);
+            Raytracer raytracer = new Raytracer(Camera.CornellBoxCamera(), Scene.CornellBox()) {
+                RecursionDepth = 2
+            };
+            var pixels = raytracer.CalculatePixelsByteArray(size, size);
+            writeableBitmap.WritePixels(new Int32Rect(0, 0, size, size), pixels, size * 3, 0);
         }
     }
 }
