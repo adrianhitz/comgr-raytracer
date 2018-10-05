@@ -1,7 +1,5 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
-// TODO this whole thing is probably unnecessary, should be converted into extension methods for Vector3?
 namespace Raytracing {
     public class Colour {
         public static readonly Vector3 Black = new Vector3(0, 0, 0);
