@@ -2,12 +2,27 @@
 using System.Numerics;
 
 namespace Raytracing {
+
+    /// <summary>
+    /// Represents an drawable sphere in a <see cref="Scene"/>.
+    /// </summary>
     public class Sphere : ISceneObject {
+
+        /// <summary>
+        /// The position (centre) of the sphere in three-dimensional space.
+        /// </summary>
         public Vector3 Position { get; }
         public float R { get; }
         public Material Material { get; }
         public Texture Texture { get; }
 
+        /// <summary>
+        /// Creates a new sphere
+        /// </summary>
+        /// <param name="centre">The sphere's centre in thee-dimensional space</param>
+        /// <param name="r">The sphere's radius</param>
+        /// <param name="material">The sphere's material</param>
+        /// <param name="texture">The texture that should be projected onto the sphere, if any</param>
         public Sphere(Vector3 centre, float r, Material material, Texture texture = null) {
             this.Position = centre;
             this.R = r;
@@ -15,6 +30,12 @@ namespace Raytracing {
             this.Texture = texture;
         }
 
+        /// <summary>
+        /// Calculates the closest <see cref="HitPoint"/> of a <see cref="Ray"/> if the <see cref="Ray"/> intersects it. Null otherwise.
+        /// Returns a <see cref="HitPoint"/> containing information, most importantly the position in three-dimensional space where the hit occured.
+        /// </summary>
+        /// <param name="ray">The <see cref="Ray"/> used to calculate the <see cref="HitPoint"/></param>
+        /// <returns>A <see cref="HitPoint"/> containing information, most importantly the position in three-dimensional space where the hit occured.</returns>
         public HitPoint CalculateHitPoint(Ray ray) {
             Vector3 CE = ray.Origin - Position;
             float a = 1;
