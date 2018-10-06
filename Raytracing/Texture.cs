@@ -18,9 +18,8 @@ namespace Raytracing {
         }
 
         public Vector3 GetPixel(float s, float t) {
-            float clamp(float v) => Math.Min(Math.Max(v, 0), 1);
-            int x = (int)(((clamp(s) + RotationOffset / (2 * Math.PI)) % 1.0) * (Width - 1));
-            int y = (int)((1 - clamp(t)) * (Height - 1));
+            int x = (int)(((s + RotationOffset/ (2 * Math.PI)) % 1.0) * (Width - 1));
+            int y = (int)((1 - (t % 1.0)) * (Height - 1));
             Color c = bitmap.GetPixel(x, y);
             return new Vector3(c.R, c.G, c.B).FromSRGB(Gamma);
         }
