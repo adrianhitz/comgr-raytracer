@@ -15,7 +15,7 @@ namespace Raytracing {
         /// <summary>
         /// Specular reflection component for this material. A vector with components in the range [0,1].
         /// </summary>
-        public Vector3 Specular { get; } // TODO This is actually not used => fix
+        public Vector3 Specular { get; }
 
         /// <summary>
         /// Regular reflection component for this material. A vector with components in the range [0,1].

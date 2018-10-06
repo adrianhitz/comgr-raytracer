@@ -69,7 +69,7 @@ namespace Raytracing {
             float nL = Vector3.Dot(this.Normal, L);
             Vector3 eh = Vector3.Normalize(this.Position - cameraPosition);
             Vector3 r = Vector3.Normalize(2 * nL * this.Normal - L);
-            return nL >= 0 ? lightSource.Colour * (float)Math.Pow(Vector3.Dot(r, eh), k) : Colour.Black;
+            return nL >= 0 ? lightSource.Colour * (float)Math.Pow(Vector3.Dot(r, eh), k) * this.HitObject.Material.Specular : Colour.Black;
         }
 
         /// <summary>
