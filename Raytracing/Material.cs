@@ -29,18 +29,17 @@ namespace Raytracing {
 
 
         /// <summary>
-        /// Creates a new material with the specified properties.
+        /// Creates a new material with the specified properties. Components outside the range [0,1] will be clamped.
         /// </summary>
         /// <param name="diffuse">Diffuse reflection component</param>
         /// <param name="specular">Specular reflection component</param>
         /// <param name="reflective">Regular reflection component</param>
         /// <param name="emissive">Emissive component</param>
         public Material(Vector3 diffuse, Vector3 specular, Vector3 reflective, Vector3 emissive) {
-            // TODO clamp values
-            this.Diffuse = diffuse;
-            this.Specular = specular;
-            this.Reflective = reflective;
-            this.Emissive = emissive;
+            this.Diffuse = diffuse.Clamp();
+            this.Specular = specular.Clamp();
+            this.Reflective = reflective.Clamp();
+            this.Emissive = emissive.Clamp();
         }
 
         /// <summary>
