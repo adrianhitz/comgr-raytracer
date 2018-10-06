@@ -24,7 +24,7 @@ namespace Raytracing {
         /// </summary>
         public Vector3 AmbientLight {
             get => ambientLight;
-            set => ambientLight = new Vector3(Math.Min(Math.Max(value.X, 0), 1), Math.Min(Math.Max(value.Y, 0), 1), Math.Min(Math.Max(value.Z, 0), 1));
+            set => ambientLight = value.Clamp();
         }
 
         /// <summary>
