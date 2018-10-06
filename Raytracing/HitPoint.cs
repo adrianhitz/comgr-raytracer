@@ -3,7 +3,6 @@ using System.Numerics;
 
 namespace Raytracing {
 
-    // TODO Maybe move hit point calculations to this class? Seems to make more sense.
     /// <summary>
     /// Reperesents a hit point, where a <see cref="Ray"/> intersected a <see cref="ISceneObject"/>.
     /// This unfortunately contains a bunch of different things and is generally a bit of a mess.
