@@ -1,7 +1,11 @@
 ﻿using System.Numerics;
 
 namespace Raytracing {
-    public class Colour {
+
+    /// <summary>
+    /// Contains some predefined colour values.
+    /// </summary>
+    public static class Colour {
         public static readonly Vector3 Black = new Vector3(0, 0, 0);
         public static readonly Vector3 Red = new Vector3(1, 0, 0);
         public static readonly Vector3 Green = new Vector3(0, 1, 0);
