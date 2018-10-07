@@ -17,7 +17,7 @@ namespace Raytracing {
         /// Adds multiple scene objects to the container.
         /// </summary>
         /// <param name="sceneObjects">The scene objects to add to the container</param>
-        void Add(IEnumerable<ISceneObject> sceneObjects);
+        void AddRange(IEnumerable<ISceneObject> sceneObjects);
 
         /// <summary>
         /// Finds the closest intersection of a given ray with a drawable object in the scene.

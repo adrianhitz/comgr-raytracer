@@ -34,7 +34,7 @@ namespace Raytracing.Acceleration {
         /// Adds multiple scene objects to this container.
         /// </summary>
         /// <param name="sceneObjects">Scene objects to add</param>
-        public void Add(IEnumerable<ISceneObject> sceneObjects) => this.sceneObjects.AddRange(sceneObjects);
+        public void AddRange(IEnumerable<ISceneObject> sceneObjects) => this.sceneObjects.AddRange(sceneObjects);
 
         /// <summary>
         /// Finds the closest hit point for a given ray among all the objects in this container.
