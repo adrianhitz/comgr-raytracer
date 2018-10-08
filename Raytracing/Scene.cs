@@ -50,7 +50,6 @@ namespace Raytracing {
         /// <param name="lightSources">Light sources</param>
         /// <param name="acceleration">Which acceleration structure the scene should use</param>
         public Scene(IEnumerable<ISceneObject> sceneObjects, IEnumerable<LightSource> lightSources, AccelerationStructure acceleration = AccelerationStructure.None) {
-            // TODO finish Scene constructor
             switch(acceleration) {
                 case AccelerationStructure.BVH:
                     this.SceneObjects = new BoundingVolumeHierarchy(sceneObjects);
