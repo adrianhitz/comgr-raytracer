@@ -56,8 +56,6 @@ namespace Raytracing.Shapes {
             return null;
         }
 
-        public BoundingSphere GetBoundingSphere() {
-            throw new NotImplementedException(); // TODO implement Sphere.GetBoundingSphere
-        }
+        public BoundingSphere GetBoundingSphere() => new BoundingSphere(Position, R, this);
     }
 }
