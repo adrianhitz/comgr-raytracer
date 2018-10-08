@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Raytracing {
+namespace Raytracing.Shapes {
 
     /// <summary>
     /// Represents a point light source. Illuminates a <see cref="Scene"/>.

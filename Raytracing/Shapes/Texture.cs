@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Numerics;
 
-namespace Raytracing {
+namespace Raytracing.Shapes {
 
     /// <summary>
     /// Handles Textures that can be projected onto <see cref="ISceneObject"/>s like <see cref="Sphere"/>s.

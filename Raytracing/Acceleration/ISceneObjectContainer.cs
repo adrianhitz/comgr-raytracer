@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Raytracing.Shapes;
+using System.Collections.Generic;
 
-namespace Raytracing {
+namespace Raytracing.Acceleration {
 
     /// <summary>
     /// Represents a container for drawable scene objects.

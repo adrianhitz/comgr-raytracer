@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Raytracing {
+namespace Raytracing.Shapes {
 
     /// <summary>
     /// Represents a surface material for <see cref="ISceneObject" />s. Defines how the surface interacts with light (e.g. reflections).
@@ -27,6 +27,10 @@ namespace Raytracing {
         /// </summary>
         public Vector3 Emissive { get; }
 
+        /// <summary>
+        /// This material's texture. Null if there is none.
+        /// </summary>
+        public Texture Texture { get; }
 
         /// <summary>
         /// Creates a new material with the specified properties. Components outside the range [0,1] will be clamped.
@@ -35,11 +39,13 @@ namespace Raytracing {
         /// <param name="specular">Specular reflection component</param>
         /// <param name="reflective">Regular reflection component</param>
         /// <param name="emissive">Emissive component</param>
-        public Material(Vector3 diffuse, Vector3 specular, Vector3 reflective, Vector3 emissive) {
+        /// <param name="texture">Texture</param>
+        public Material(Vector3 diffuse, Vector3 specular, Vector3 reflective, Vector3 emissive, Texture texture = null) {
             this.Diffuse = diffuse.Clamp();
             this.Specular = specular.Clamp();
             this.Reflective = reflective.Clamp();
             this.Emissive = emissive.Clamp();
+            this.Texture = texture;
         }
 
         /// <summary>
@@ -48,6 +54,8 @@ namespace Raytracing {
         /// <param name="diffuse">Diffuse reflection component</param>
         /// <param name="specular">Specular reflection component</param>
         /// <param name="reflective">Regular reflection component</param>
-        public Material(Vector3 diffuse, Vector3 specular, Vector3 reflective) : this(diffuse, specular, reflective, Colour.Black) { }
+        /// <param name="texture">Texture</param>
+        public Material(Vector3 diffuse, Vector3 specular, Vector3 reflective, Texture texture = null)
+            : this(diffuse, specular, reflective, Colour.Black, texture) { }
     }
 }

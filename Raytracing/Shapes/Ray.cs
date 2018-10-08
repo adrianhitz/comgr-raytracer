@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Raytracing {
+namespace Raytracing.Shapes {
 
     /// <summary>
     /// Represents a ray. A ray, or a half-line, is a line with an initial point.

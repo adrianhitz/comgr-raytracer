@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Raytracing {
+namespace Raytracing.Shapes {
 
     /// <summary>
     /// Represents an drawable sphere in a <see cref="Scene"/>.
     /// </summary>
     public class Sphere : ISceneObject {
 
-        /// <summary>
-        /// The position (centre) of the sphere in three-dimensional space.
-        /// </summary>
-        public Vector3 Position { get; }
-        public float R { get; }
+        public Vector3 Position { get; protected set; }
+        public float R { get; protected set; }
         public Material Material { get; }
-        public Texture Texture { get; }
 
         /// <summary>
         /// Creates a new sphere
@@ -23,12 +19,17 @@ namespace Raytracing {
         /// <param name="r">The sphere's radius</param>
         /// <param name="material">The sphere's material</param>
         /// <param name="texture">The texture that should be projected onto the sphere, if any</param>
-        public Sphere(Vector3 centre, float r, Material material, Texture texture = null) {
-            this.Position = centre;
+        public Sphere(Vector3 position, float r, Material material = null) {
+            this.Position = position;
             this.R = r;
             this.Material = material;
-            this.Texture = texture;
         }
+
+        /// <summary>
+        /// Creates a sphere without parameters. Mostly used to be able to calculate position and radius of spheres in subclasses (like BVHNode)
+        /// before assigning them. Yes it's ugly. I'm sorry.
+        /// </summary>
+        protected Sphere() { }
 
         /// <summary>
         /// Calculates the closest <see cref="HitPoint"/> of a <see cref="Ray"/> if the <see cref="Ray"/> intersects it. Null otherwise.
@@ -53,6 +54,10 @@ namespace Raytracing {
                 }
             }
             return null;
+        }
+
+        public BoundingSphere GetBoundingSphere() {
+            throw new NotImplementedException(); // TODO implement Sphere.GetBoundingSphere
         }
     }
 }

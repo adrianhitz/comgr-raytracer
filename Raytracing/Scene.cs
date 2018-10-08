@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Raytracing.Acceleration;
+using Raytracing.Acceleration.BVH;
+using Raytracing.Shapes;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -8,7 +11,7 @@ namespace Raytracing {
     /// Represents a scene with objects and light sources, that can be drawn by the <see cref="Raytracer"/>.
     /// </summary>
     public class Scene {
-        private List<ISceneObject> SceneObjects { get; }
+        private ISceneObjectContainer SceneObjects { get; }
         private List<LightSource> LightSources { get; }
         private static readonly float HIT_POINT_ADJUSTMENT = 0.01f;
         private Vector3 ambientLight = Colour.Black;
@@ -36,31 +39,35 @@ namespace Raytracing {
             set => shadowBrightness = Math.Min(Math.Max(value, 0), 1);
         }
 
+        public enum AccelerationStructure { None, BVH };
+
+        public AccelerationStructure Acceleration { get; set; } = AccelerationStructure.None;
+
         /// <summary>
-        /// Creates an empty scene.
+        /// Creatues a scene
         /// </summary>
-        public Scene() {
-            this.SceneObjects = new List<ISceneObject>();
-            this.LightSources = new List<LightSource>();
+        /// <param name="sceneObjects">Drawable scene objects</param>
+        /// <param name="lightSources">Light sources</param>
+        /// <param name="acceleration">Which acceleration structure the scene should use</param>
+        public Scene(IEnumerable<ISceneObject> sceneObjects, IEnumerable<LightSource> lightSources, AccelerationStructure acceleration = AccelerationStructure.None) {
+            // TODO finish Scene constructor
+            switch(acceleration) {
+                case AccelerationStructure.BVH:
+                    this.SceneObjects = new BoundingVolumeHierarchy(sceneObjects);
+                    break;
+                default:
+                    this.SceneObjects = new SceneObjectList(sceneObjects);
+                    break;
+            }
+            this.LightSources = new List<LightSource>(lightSources);
         }
 
         /// <summary>
-        /// Creates a scene with a drawable object and a light source.
+        /// Creates an empty scene
         /// </summary>
-        /// <param name="sceneObject">Drawable object to be added to the scene</param>
-        /// <param name="lightSource">Light source to be added to the scene</param>
-        public Scene(ISceneObject sceneObject, LightSource lightSource) : this() {
-            AddObject(sceneObject);
-        }
-
-        /// <summary>
-        /// Creates a scene with multiple drawable objects and a light source.
-        /// </summary>
-        /// <param name="sceneObjects">Drawable objects to be added to the scene</param>
-        /// <param name="lightSource">Light source to be added to the scene</param>
-        public Scene(IEnumerable<ISceneObject> sceneObjects, LightSource lightSource) : this() {
-            AddObjects(sceneObjects);
-        }
+        /// <param name="acceleration">Which acceleration structure the scene should use</param>
+        public Scene(AccelerationStructure acceleration = AccelerationStructure.None)
+            : this(new List<ISceneObject>(), new List<LightSource>(), acceleration) { }
 
         /// <summary>
         /// Creates a scene with multiple drawable objects and multiple lightsources.
@@ -113,14 +120,7 @@ namespace Raytracing {
         /// three-dimensional space and the surface normal.
         /// </returns>
         public HitPoint FindClosestHitPoint(Ray ray) {
-            HitPoint closestHitPoint = null;
-            foreach(ISceneObject sceneObject in SceneObjects) {
-                HitPoint hitPoint = sceneObject.CalculateHitPoint(ray);
-                if(hitPoint != null && (closestHitPoint == null || hitPoint?.Lambda < closestHitPoint?.Lambda)) {
-                    closestHitPoint = hitPoint;
-                }
-            }
-            return closestHitPoint;
+            return SceneObjects.FindClosestHitPoint(ray);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Raytracing {
         public Vector3 CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Vector3 colour = AmbientLight;
-            colour += hitPoint.HitObject.Material.Emissive;
+            colour += hitPoint.Material.Emissive;
             if(hitPoint != null) {
                 foreach(LightSource lightSource in LightSources) {
                     bool occluded = IsOccluded(ray, hitPoint, lightSource);
@@ -148,10 +148,10 @@ namespace Raytracing {
                     if(!occluded) colour += hitPoint.Phong(lightSource, ray.Origin, PhongK);
                 }
                 // Regular reflection including fresnel
-                if(recursionDepth > 0 && !hitPoint.HitObject.Material.Reflective.Equals(Colour.Black)) {
+                if(recursionDepth > 0 && !hitPoint.Material.Reflective.Equals(Colour.Black)) {
                     Vector3 reflection = CalculateReflection(ray, hitPoint, recursionDepth - 1);
                     Vector3 fresnel = hitPoint.Fresnel(ray);
-                    colour += reflection * fresnel * hitPoint.HitObject.Material.Reflective;
+                    colour += reflection * fresnel * hitPoint.Material.Reflective;
                 }
             }
             return colour;
@@ -190,15 +190,15 @@ namespace Raytracing {
             Vector3 wallReflectiveness = new Vector3(0.05f, 0.05f, 0.05f);
             Vector3 sphereReflectiveness = new Vector3(0.1f, 0.1f, 0.1f);
             Material whiteWall = new Material(Colour.White, specularWall, wallReflectiveness);
-            cornellBox.AddObjects(new Sphere[] {
+            cornellBox.AddObjects(new List<ISceneObject> {
                 new Sphere(new Vector3(1001, 0, 0), 1000, new Material(Colour.Red, specularWall, wallReflectiveness)),
                 new Sphere(new Vector3(-1001, 0, 0), 1000, new Material(Colour.Blue, specularWall, wallReflectiveness)),
                 new Sphere(new Vector3(0, 0, 1001), 1000, whiteWall),
                 new Sphere(new Vector3(0, -1001, 0), 1000, whiteWall),
                 new Sphere(new Vector3(0, 1001, 0), 1000, whiteWall),
                 new Sphere(new Vector3(0, 0, -1005), 1000,whiteWall),
-                new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, new Material(Colour.Yellow, specularSphere, sphereReflectiveness), new Texture(@"Resources\pluto.jpg", rotationOffset: 0.8f*(float)Math.PI)),
-                new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, specularSphere, sphereReflectiveness), new Texture(@"Resources\earth.jpg", rotationOffset: 1.2f*(float)Math.PI))
+                new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, new Material(Colour.Yellow, specularSphere, sphereReflectiveness, new Texture(@"Resources\pluto.jpg", rotationOffset: 0.8f*(float)Math.PI))),
+                new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, specularSphere, sphereReflectiveness, new Texture(@"Resources\earth.jpg", rotationOffset: 1.2f*(float)Math.PI)))
             });
             cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.6f), new Vector3(0.15f, 0.7f, 0.15f)));
             cornellBox.AddLightSource(new LightSource(new Vector3(0.4f, -0.9f, 0f), new Vector3(0.7f, 0.15f, 0.15f)));
