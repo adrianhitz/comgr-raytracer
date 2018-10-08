@@ -21,7 +21,7 @@ namespace Raytracing.Acceleration {
         void AddRange(IEnumerable<ISceneObject> sceneObjects);
 
         /// <summary>
-        /// Finds the closest intersection of a given ray with a drawable object in the scene.
+        /// Finds the closest intersection of a given ray with a drawable object in this container.
         /// </summary>
         /// <param name="ray">The ray, e.g. an eye ray</param>
         /// <returns>

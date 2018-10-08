@@ -39,12 +39,20 @@ namespace Raytracing {
             set => shadowBrightness = Math.Min(Math.Max(value, 0), 1);
         }
 
-        public enum AccelerationStructure { None, BVH };
+        /// <summary>
+        /// Represents acceleration structures that can be used to accelerate the rendering of the scene by having to compare fewer objects.s
+        /// </summary>
+        public enum AccelerationStructure {
+            None, BVH, Grid
+        };
 
+        /// <summary>
+        /// Which acceleration structure this scene is using. Default is none.
+        /// </summary>
         public AccelerationStructure Acceleration { get; set; } = AccelerationStructure.None;
 
         /// <summary>
-        /// Creatues a scene
+        /// Creates a scene
         /// </summary>
         /// <param name="sceneObjects">Drawable scene objects</param>
         /// <param name="lightSources">Light sources</param>
@@ -54,6 +62,8 @@ namespace Raytracing {
                 case AccelerationStructure.BVH:
                     this.SceneObjects = new BoundingVolumeHierarchy(sceneObjects);
                     break;
+                case AccelerationStructure.Grid:
+                    throw new NotImplementedException();
                 default:
                     this.SceneObjects = new SceneObjectList(sceneObjects);
                     break;
@@ -133,8 +143,8 @@ namespace Raytracing {
         public Vector3 CalculateColour(Ray ray, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Vector3 colour = AmbientLight;
-            colour += hitPoint.Material.Emissive;
             if(hitPoint != null) {
+                colour += hitPoint.Material.Emissive;
                 foreach(LightSource lightSource in LightSources) {
                     bool occluded = IsOccluded(ray, hitPoint, lightSource);
 
@@ -182,14 +192,13 @@ namespace Raytracing {
         /// Premade Cornell Box scene.
         /// </summary>
         /// <returns>Premade Cornell Box scene.</returns>
-        public static Scene CornellBox() {
-            Scene cornellBox = new Scene();
+        public static Scene CornellBox(AccelerationStructure accelerationStructure = AccelerationStructure.None) {
             Vector3 specularWall = new Vector3(0, 0, 0);
             Vector3 specularSphere = new Vector3(1, 1, 1);
             Vector3 wallReflectiveness = new Vector3(0.05f, 0.05f, 0.05f);
             Vector3 sphereReflectiveness = new Vector3(0.1f, 0.1f, 0.1f);
             Material whiteWall = new Material(Colour.White, specularWall, wallReflectiveness);
-            cornellBox.AddObjects(new List<ISceneObject> {
+            var cornellBoxSpheres = new List<ISceneObject> {
                 new Sphere(new Vector3(1001, 0, 0), 1000, new Material(Colour.Red, specularWall, wallReflectiveness)),
                 new Sphere(new Vector3(-1001, 0, 0), 1000, new Material(Colour.Blue, specularWall, wallReflectiveness)),
                 new Sphere(new Vector3(0, 0, 1001), 1000, whiteWall),
@@ -198,11 +207,13 @@ namespace Raytracing {
                 new Sphere(new Vector3(0, 0, -1005), 1000,whiteWall),
                 new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, new Material(Colour.Yellow, specularSphere, sphereReflectiveness, new Texture(@"Resources\pluto.jpg", rotationOffset: 0.8f*(float)Math.PI))),
                 new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, specularSphere, sphereReflectiveness, new Texture(@"Resources\earth.jpg", rotationOffset: 1.2f*(float)Math.PI)))
-            });
-            cornellBox.AddLightSource(new LightSource(new Vector3(0, -0.9f, -0.6f), new Vector3(0.15f, 0.7f, 0.15f)));
-            cornellBox.AddLightSource(new LightSource(new Vector3(0.4f, -0.9f, 0f), new Vector3(0.7f, 0.15f, 0.15f)));
-            cornellBox.AddLightSource(new LightSource(new Vector3(-0.4f, -0.9f, 0f), new Vector3(0.15f, 0.15f, 0.7f)));
-            return cornellBox;
+            };
+            var cornellBoxLight = new List<LightSource> {
+                new LightSource(new Vector3(0, -0.9f, -0.6f), new Vector3(0.15f, 0.7f, 0.15f)),
+                new LightSource(new Vector3(0.4f, -0.9f, 0f), new Vector3(0.7f, 0.15f, 0.15f)),
+                new LightSource(new Vector3(-0.4f, -0.9f, 0f), new Vector3(0.15f, 0.15f, 0.7f))
+            };
+            return new Scene(cornellBoxSpheres, cornellBoxLight, accelerationStructure);
         }
     }
 }
