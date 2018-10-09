@@ -26,6 +26,12 @@ namespace Raytracing {
         /// </summary>
         public int RecursionDepth { get; set; } = 2;
 
+
+        /// <summary>
+        /// Activates or deactivates anti-aliasing
+        /// </summary>
+        public bool AntiAliasing { get; set; }
+
         /// <summary>
         /// The standard deviation used for random sampling of pixels for anti-aliasing
         /// </summary>
@@ -41,9 +47,10 @@ namespace Raytracing {
         /// </summary>
         /// <param name="camera">A camera</param>
         /// <param name="scene">A scene</param>
-        public Raytracer(Camera camera, Scene scene) {
+        public Raytracer(Camera camera, Scene scene, bool antiAliasing = false) {
             this.Camera = camera;
             this.Scene = scene;
+            this.AntiAliasing = antiAliasing;
         }
 
         /// <summary>
@@ -58,12 +65,18 @@ namespace Raytracing {
             for(int x = 0; x < width; x++) {
                 for(int y = 0; y < height; y++) {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1)) * 2 - 1);
-                    Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, Samples, GaussSigma / width);
-                    Vector3 colour = new Vector3(0, 0, 0);
-                    foreach(Ray eyeRay in eyeRays) {
+                    Vector3 colour = Colour.Black;
+                    if(AntiAliasing) {
+                        Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, Samples, GaussSigma / width);
+                        foreach(Ray eyeRay in eyeRays) {
+                            colour += Scene.CalculateColour(eyeRay, RecursionDepth);
+                        }
+                        colour /= Samples;
+                    } else {
+                        Ray eyeRay = Camera.CreateEyeRay(pixel);
                         colour += Scene.CalculateColour(eyeRay, RecursionDepth);
                     }
-                    pixels[x, y] = colour / Samples;
+                    pixels[x, y] = colour;
 
                 }
             }
