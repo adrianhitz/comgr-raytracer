@@ -1,4 +1,5 @@
-﻿using Raytracing.Shapes;
+﻿using Raytracing.Helpers;
+using Raytracing.Shapes;
 using System;
 using System.Numerics;
 
@@ -80,6 +81,17 @@ namespace Raytracing {
             Vector3 direction = F + (pixel.X * R + pixel.Y * U) * (float)Math.Tan(FOV / 2);
             return new Ray(Position, direction);
         }
+
+        public Ray[] CreateEyeRays(Vector2 pixel, Random random, int n = 10, float sigma = 0.5f) {
+            Ray[] rays = new Ray[n];
+            for(int i = 0; i < n; i++) {
+                float x = (float)random.NextGaussian(pixel.X, sigma);
+                float y = (float)random.NextGaussian(pixel.Y, sigma);
+                rays[i] = CreateEyeRay(new Vector2(x, y));
+            }
+            return rays;
+        }
+
 
         /// <summary>
         /// Premade camera for the Cornell Box scene.

@@ -1,5 +1,6 @@
 ﻿using Raytracing.Helpers;
 using Raytracing.Shapes;
+using System;
 using System.Numerics;
 
 namespace Raytracing {
@@ -23,7 +24,17 @@ namespace Raytracing {
         /// How far the recursive calculation of reflection should go. 0 means no reflection,
         /// 1 just regular reflections, 2 reflections of reflections, etc.
         /// </summary>
-        public int RecursionDepth { get; set; } = 3;
+        public int RecursionDepth { get; set; } = 2;
+
+        /// <summary>
+        /// The standard deviation used for random sampling of pixels for anti-aliasing
+        /// </summary>
+        public float GaussSigma { get; set; } = 0.5f;
+
+        /// <summary>
+        /// The numbers of samples for anti-aliasing
+        /// </summary>
+        public int Samples { get; set; } = 5;
 
         /// <summary>
         /// Creates a new raytracer with a camera and a scene
@@ -43,12 +54,17 @@ namespace Raytracing {
         /// <returns>A two-dimensional array of vectors with (R, G, B) values.</returns>
         public Vector3[,] CalculatePixels(int width, int height) {
             Vector3[,] pixels = new Vector3[width, height];
-
+            Random random = new Random();
             for(int x = 0; x < width; x++) {
                 for(int y = 0; y < height; y++) {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1)) * 2 - 1);
-                    Ray eyeRay = Camera.CreateEyeRay(pixel);
-                    pixels[x, y] = Scene.CalculateColour(eyeRay, RecursionDepth);
+                    Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, Samples, GaussSigma / width);
+                    Vector3 colour = new Vector3(0, 0, 0);
+                    foreach(Ray eyeRay in eyeRays) {
+                        colour += Scene.CalculateColour(eyeRay, RecursionDepth);
+                    }
+                    pixels[x, y] = colour / Samples;
+
                 }
             }
             return pixels;
