@@ -52,7 +52,7 @@
     <Compile Include="Shapes\HitPoint.cs" />
     <Compile Include="Acceleration\ISceneObjectContainer.cs" />
     <Compile Include="Shapes\LightSource.cs" />
-    <Compile Include="Colour.cs" />
+    <Compile Include="Helpers\Colour.cs" />
     <Compile Include="Shapes\ISceneObject.cs" />
     <Compile Include="Shapes\Material.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,7 +61,7 @@
     <Compile Include="Scene.cs" />
     <Compile Include="Shapes\Sphere.cs" />
     <Compile Include="Shapes\Texture.cs" />
-    <Compile Include="Vector3Extensions.cs" />
+    <Compile Include="Helpers\Vector3Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\earth.jpg">

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Raytracing {
+namespace Raytracing.Helpers {
 
     /// <summary>
     /// Contains some predefined colour values.

@@ -1,5 +1,6 @@
 ﻿using Raytracing.Acceleration;
 using Raytracing.Acceleration.BVH;
+using Raytracing.Helpers;
 using Raytracing.Shapes;
 using System;
 using System.Collections.Generic;

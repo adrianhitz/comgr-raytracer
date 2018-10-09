@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Raytracing.Helpers;
+using System;
 using System.Drawing;
 using System.Numerics;
 

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Raytracing.Helpers;
+using System.Numerics;
 
 namespace Raytracing.Shapes {
 

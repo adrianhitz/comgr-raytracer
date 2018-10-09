@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Raytracing {
+namespace Raytracing.Helpers {
 
     /// <summary>
     /// Contains extension methods for <see cref="System.Numerics.Vector3" />.
