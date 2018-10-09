@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Premade\CornellBox.cs" />
     <Compile Include="Helpers\RandomExtensions.cs" />
     <Compile Include="Shapes\BoundingSphere.cs" />
     <Compile Include="Acceleration\BVH\BoundingVolumeHierarchy.cs" />

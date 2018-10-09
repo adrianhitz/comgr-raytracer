@@ -91,17 +91,5 @@ namespace Raytracing {
             }
             return rays;
         }
-
-
-        /// <summary>
-        /// Premade camera for the Cornell Box scene.
-        /// </summary>
-        /// <returns>A premade camera for the Cornell Box scene</returns>
-        public static Camera CornellBoxCamera() {
-            Vector3 position = new Vector3(0, 0, -4);
-            Vector3 lookAt = new Vector3(0, 0, 6);
-            float fov = (float)Math.PI / 5;
-            return new Camera(position, lookAt, fov);
-        }
     }
 }
