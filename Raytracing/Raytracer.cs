@@ -24,13 +24,7 @@ namespace Raytracing {
         /// How far the recursive calculation of reflection should go. 0 means no reflection,
         /// 1 just regular reflections, 2 reflections of reflections, etc.
         /// </summary>
-        public int RecursionDepth { get; set; } = 2;
-
-
-        /// <summary>
-        /// Activates or deactivates anti-aliasing
-        /// </summary>
-        public bool AntiAliasing { get; set; }
+        public int ReflectionLevel { get; set; }
 
         /// <summary>
         /// The standard deviation used for random sampling of pixels for anti-aliasing
@@ -40,17 +34,18 @@ namespace Raytracing {
         /// <summary>
         /// The numbers of samples for anti-aliasing
         /// </summary>
-        public int Samples { get; set; } = 5;
+        public int AASamples { get; set; }
 
         /// <summary>
         /// Creates a new raytracer with a camera and a scene
         /// </summary>
         /// <param name="camera">A camera</param>
         /// <param name="scene">A scene</param>
-        public Raytracer(Camera camera, Scene scene, bool antiAliasing = false) {
+        public Raytracer(Camera camera, Scene scene, int aaSamples = 1, int reflectionLevel = 2) {
             this.Camera = camera;
             this.Scene = scene;
-            this.AntiAliasing = antiAliasing;
+            this.AASamples = aaSamples;
+            this.ReflectionLevel = reflectionLevel;
         }
 
         /// <summary>
@@ -66,18 +61,17 @@ namespace Raytracing {
                 for(int y = 0; y < height; y++) {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1)) * 2 - 1);
                     Vector3 colour = Colour.Black;
-                    if(AntiAliasing) {
-                        Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, Samples, GaussSigma / width);
+                    if(AASamples > 1) {
+                        Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, AASamples, GaussSigma / width);
                         foreach(Ray eyeRay in eyeRays) {
-                            colour += Scene.CalculateColour(eyeRay, RecursionDepth);
+                            colour += Scene.CalculateColour(eyeRay, ReflectionLevel);
                         }
-                        colour /= Samples;
+                        colour /= AASamples;
                     } else {
                         Ray eyeRay = Camera.CreateEyeRay(pixel);
-                        colour += Scene.CalculateColour(eyeRay, RecursionDepth);
+                        colour += Scene.CalculateColour(eyeRay, ReflectionLevel);
                     }
                     pixels[x, y] = colour;
-
                 }
             }
             return pixels;

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Premade\CornellBox.cs" />
     <Compile Include="Helpers\RandomExtensions.cs" />
+    <Compile Include="Premade\ManySpheres.cs" />
     <Compile Include="Shapes\BoundingSphere.cs" />
     <Compile Include="Acceleration\BVH\BoundingVolumeHierarchy.cs" />
     <Compile Include="Acceleration\BVH\BVHNode.cs" />
