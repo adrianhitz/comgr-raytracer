@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace Raytracing.Helpers {
     static class RandomExtensions {
@@ -21,6 +22,15 @@ namespace Raytracing.Helpers {
             var rand_normal = mu + sigma * rand_std_normal;
 
             return rand_normal;
+        }
+
+        /// <summary>
+        /// Generates a vector with three random components greater than or equal to 0.0 and less than 1.0.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public static Vector3 NextVector3(this Random r) {
+            return new Vector3((float)r.NextDouble(), (float)r.NextDouble(), (float)r.NextDouble());
         }
     }
 }
