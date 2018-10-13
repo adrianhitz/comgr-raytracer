@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Comgr"
         mc:Ignorable="d"
+        WindowStartupLocation="Manual" Left="300" Top="0"
         Title="Comgr Raytracer" SizeToContent="WidthAndHeight">
     <Grid Name="grid" Height="700" Width="700">
         

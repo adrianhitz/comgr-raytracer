@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using Raytracing;
+using Raytracing.Premade;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Raytracing;
 
 namespace Comgr {
     /// <summary>
@@ -23,18 +13,23 @@ namespace Comgr {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-
-            int size = 1000;
+            
+            int imageResolution = 800;
             Image image = new Image();
-            WriteableBitmap writeableBitmap = new WriteableBitmap(size, size, 96, 96, PixelFormats.Bgr24, null);
+            WriteableBitmap writeableBitmap = new WriteableBitmap(imageResolution, imageResolution, 96, 96, PixelFormats.Bgr24, null);
             image.Source = writeableBitmap;
             grid.Children.Add(image);
-
-            Raytracer raytracer = new Raytracer(Camera.CornellBoxCamera(), Scene.CornellBox()) {
-                RecursionDepth = 2
-            };
-            var pixels = raytracer.CalculatePixelsByteArray(size, size);
-            writeableBitmap.WritePixels(new Int32Rect(0, 0, size, size), pixels, size * 3, 0);
+            Raytracer raytracer = new Raytracer(Premade.CornellBox.Camera(), Premade.CornellBox.Scene());
+            byte[] pixels = null;
+            Thread t = new Thread(() => {
+                pixels = raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
+                this.Dispatcher.Invoke(() => {
+                    writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
+                    this.Activate();
+                });
+            });
+            t.IsBackground = true;
+            t.Start();
         }
     }
 }
