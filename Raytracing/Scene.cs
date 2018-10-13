@@ -80,16 +80,6 @@ namespace Raytracing {
             : this(new List<ISceneObject>(), new List<LightSource>(), acceleration) { }
 
         /// <summary>
-        /// Creates a scene with multiple drawable objects and multiple lightsources.
-        /// </summary>
-        /// <param name="sceneObjects">Drawable objects to be added to the scene</param>
-        /// <param name="lightSources">Light sources to be added to the scene</param>
-        public Scene(IEnumerable<ISceneObject> sceneObjects, IEnumerable<LightSource> lightSources) {
-            AddObjects(sceneObjects);
-            AddLightSources(lightSources);
-        }
-
-        /// <summary>
         /// Adds a drawable object to the scene
         /// </summary>
         /// <param name="sceneObject">A drawable object</param>
