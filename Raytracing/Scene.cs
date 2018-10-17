@@ -17,6 +17,7 @@ namespace Raytracing {
         private static readonly float HIT_POINT_ADJUSTMENT = 0.01f;
         private Vector3 ambientLight = Colour.Black;
         private float shadowBrightness = 0.1f;
+        private Random random = new Random();
 
         /// <summary>
         /// The k value used for the calculation of Phong reflection.
@@ -188,7 +189,7 @@ namespace Raytracing {
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             int reachLight = 0;
             Vector3 L = lightSource.Position - adjustedPosition;
-            Ray[] shadowFeelers = lightSource.GenerateShadowFeelers(adjustedPosition, ShadowSamples);
+            Ray[] shadowFeelers = lightSource.GenerateShadowFeelers(adjustedPosition, random, ShadowSamples);
             foreach(Ray shadowFeeler in shadowFeelers) {
                 HitPoint feelerHitPoint = FindClosestHitPoint(shadowFeeler);
                 if(!(feelerHitPoint != null && feelerHitPoint.Lambda <= L.Length())) reachLight++;

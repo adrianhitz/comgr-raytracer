@@ -42,20 +42,18 @@ namespace Raytracing.Shapes {
             Vector3 Ny = Vector3.Normalize(Vector3.Cross(L, Nx));
             // Generate a random point
             // TODO Random as parameter?
-            float r = (float)random.NextDouble();
             float theta = (float)(2 * Math.PI * random.NextDouble());
-            float x = (float)(Math.Sqrt(r) * Math.Sin(theta));
-            float y = (float)(Math.Sqrt(r) * Math.Cos(theta));
+            float x = (float)(Math.Sqrt(random.NextDouble()) * Math.Sin(theta));
+            float y = (float)(Math.Sqrt(random.NextDouble()) * Math.Cos(theta));
             Vector3 p = Position + Nx * x * Radius + Ny * y * Radius;
             Vector3 Lprime = p - origin;
             Ray shadowFeeler = new Ray(origin, Lprime);
             return shadowFeeler;
         }
 
-        public Ray[] GenerateShadowFeelers(Vector3 origin, int n = 1) {
+        public Ray[] GenerateShadowFeelers(Vector3 origin, Random random, int n = 1) {
             n = Math.Max(n, 1);
             Ray[] rays = new Ray[n];
-            Random random = new Random();
             for(int i = 0; i < n; i++) {
                 rays[i] = GenerateShadowFeeler(origin, random);
             }
