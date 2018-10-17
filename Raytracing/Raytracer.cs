@@ -2,6 +2,7 @@
 using Raytracing.Shapes;
 using System;
 using System.Numerics;
+using System.Threading.Tasks;
 
 namespace Raytracing {
 
@@ -62,24 +63,24 @@ namespace Raytracing {
         /// <returns>A two-dimensional array of vectors with (R, G, B) values.</returns>
         public Vector3[,] CalculatePixels(int width, int height) {
             Vector3[,] pixels = new Vector3[width, height];
-            Random random = new Random();
-            for(int x = 0; x < width; x++) {
+            Parallel.For(0, width, x => {
+                Random random = new Random();
                 for(int y = 0; y < height; y++) {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1)) * 2 - 1);
                     Vector3 colour = Colour.Black;
                     if(AASamples > 1) {
                         Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, AASamples, 2 * GaussSigma / width);
                         foreach(Ray eyeRay in eyeRays) {
-                            colour += Scene.CalculateColour(eyeRay, ShadowSamples, ReflectionLevel);
+                            colour += Scene.CalculateColour(eyeRay, ShadowSamples, random, ReflectionLevel);
                         }
                         colour /= AASamples;
                     } else {
                         Ray eyeRay = Camera.CreateEyeRay(pixel);
-                        colour += Scene.CalculateColour(eyeRay, ShadowSamples, ReflectionLevel);
+                        colour += Scene.CalculateColour(eyeRay, ShadowSamples, random, ReflectionLevel);
                     }
                     pixels[x, y] = colour;
                 }
-            }
+            });
             return pixels;
         }
 

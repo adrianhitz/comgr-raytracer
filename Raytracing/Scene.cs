@@ -17,7 +17,6 @@ namespace Raytracing {
         private static readonly float HIT_POINT_ADJUSTMENT = 0.01f;
         private Vector3 ambientLight = Colour.Black;
         private float minShadowBrightness = 0.1f;
-        private Random random = new Random();
 
         /// <summary>
         /// The k value used for the calculation of Phong reflection.
@@ -132,13 +131,13 @@ namespace Raytracing {
         /// <param name="recursionDepth">How far the recursive calculation of reflection should go. 0 means no reflection,
         /// 1 just regular reflections, 2 reflections of reflections, etc.</param>
         /// <returns>A vector containing the linear colour values in (R, G, B) order.</returns>
-        public Vector3 CalculateColour(Ray ray, int shadowSamples, int recursionDepth = 1) {
+        public Vector3 CalculateColour(Ray ray, int shadowSamples, Random random, int recursionDepth = 1) {
             HitPoint hitPoint = FindClosestHitPoint(ray);
             Vector3 colour = AmbientLight;
             if(hitPoint != null) {
                 colour += hitPoint.Material.Emissive;
                 foreach(LightSource lightSource in LightSources) {
-                    float illumination = CalculateIllumination(ray, hitPoint, lightSource, shadowSamples);
+                    float illumination = CalculateIllumination(ray, hitPoint, lightSource, shadowSamples, random);
                     illumination = Math.Max(illumination, minShadowBrightness);
                     // Diffuse reflection
                     Vector3 diffuse = hitPoint.Diffuse(lightSource);
@@ -150,7 +149,7 @@ namespace Raytracing {
                 }
                 // Regular reflection including fresnel
                 if(recursionDepth > 0 && !hitPoint.Material.Reflective.Equals(Colour.Black)) {
-                    Vector3 reflection = CalculateReflection(ray, hitPoint, shadowSamples, recursionDepth - 1);
+                    Vector3 reflection = CalculateReflection(ray, hitPoint, shadowSamples, random, recursionDepth - 1);
                     Vector3 fresnel = hitPoint.Fresnel(ray);
                     colour += reflection * fresnel * hitPoint.Material.Reflective;
                 }
@@ -166,11 +165,11 @@ namespace Raytracing {
         /// <param name="shadowSamples">The number of shadow samples</param>
         /// <param name="recursionDepth">The recursion depth ("reflections of reflections")</param>
         /// <returns>The colour of this hit point's reflection</returns>
-        private Vector3 CalculateReflection(Ray ray, HitPoint hitPoint, int shadowSamples, int recursionDepth) {
+        private Vector3 CalculateReflection(Ray ray, HitPoint hitPoint, int shadowSamples, Random random, int recursionDepth) {
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             Vector3 reflectedDirection = Vector3.Normalize(Vector3.Reflect(ray.Direction, hitPoint.Normal));
             Ray reflectionRay = new Ray(adjustedPosition, reflectedDirection);
-            return CalculateColour(reflectionRay, shadowSamples, recursionDepth);
+            return CalculateColour(reflectionRay, shadowSamples, random, recursionDepth);
         }
 
         /// <summary>
@@ -197,7 +196,7 @@ namespace Raytracing {
         /// <param name="lightSource">The light source</param>
         /// <param name="shadowSamples">The number of shadow samples to be taken</param>
         /// <returns>A number in the range [0, 1] where 0 is no illumination and 1 is complete illumination</returns>
-        private float CalculateIllumination(Ray ray, HitPoint hitPoint, LightSource lightSource, int shadowSamples) {
+        private float CalculateIllumination(Ray ray, HitPoint hitPoint, LightSource lightSource, int shadowSamples, Random random) {
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             int reachLight = 0;
             Vector3 L = lightSource.Position - adjustedPosition;
