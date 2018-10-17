@@ -158,6 +158,14 @@ namespace Raytracing {
             return colour;
         }
 
+        /// <summary>
+        /// Calculates the reflection for a hit point.
+        /// </summary>
+        /// <param name="ray">The original eye ray</param>
+        /// <param name="hitPoint">The hit point</param>
+        /// <param name="shadowSamples">The number of shadow samples</param>
+        /// <param name="recursionDepth">The recursion depth ("reflections of reflections")</param>
+        /// <returns>The colour of this hit point's reflection</returns>
         private Vector3 CalculateReflection(Ray ray, HitPoint hitPoint, int shadowSamples, int recursionDepth) {
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             Vector3 reflectedDirection = Vector3.Normalize(Vector3.Reflect(ray.Direction, hitPoint.Normal));
