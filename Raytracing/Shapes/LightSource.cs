@@ -35,6 +35,12 @@ namespace Raytracing.Shapes {
             this.Radius = radius;
         }
 
+        /// <summary>
+        /// Generates a shadow feeler for a given point to this light source.
+        /// </summary>
+        /// <param name="origin">The point where the shadow feeler originates</param>
+        /// <param name="random">An instance of <see cref="Random"/></param>
+        /// <returns>A <see cref="Ray"/> representing the shadow feeler</returns>
         private Ray GenerateShadowFeeler(Vector3 origin, Random random) {
             Vector3 L = Vector3.Normalize(Position - origin);
             Vector3 Nx = Vector3.Normalize(Vector3.Cross(L, new Vector3(0, 1, 0)));
@@ -49,6 +55,13 @@ namespace Raytracing.Shapes {
             return shadowFeeler;
         }
 
+        /// <summary>
+        /// Generates a number of uniformly distributed shadow feelers originating from a certain point and pointing to this <see cref="LightSource"/>
+        /// </summary>
+        /// <param name="origin">The point where the shadow feelers originate</param>
+        /// <param name="random">An instance of <see cref="Random"/></param>
+        /// <param name="n">The number of shadow feelers</param>
+        /// <returns>An array containing rays that represent shadow feelers</returns>
         public Ray[] GenerateShadowFeelers(Vector3 origin, Random random, int n = 1) {
             n = Math.Max(n, 1);
             Ray[] rays = new Ray[n];
