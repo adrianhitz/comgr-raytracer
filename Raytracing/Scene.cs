@@ -139,7 +139,7 @@ namespace Raytracing {
                 colour += hitPoint.Material.Emissive;
                 foreach(LightSource lightSource in LightSources) {
                     bool occluded = IsOccluded(ray, hitPoint, lightSource);
-                    float shadow = CalculateShadow(ray, hitPoint, lightSource, shadowSamples);
+                    float shadow = CalculateIllumination(ray, hitPoint, lightSource, shadowSamples);
 
                     // Diffuse reflection
                     Vector3 diffuse = hitPoint.Diffuse(lightSource);
@@ -183,7 +183,15 @@ namespace Raytracing {
             return feelerHitPoint != null && feelerHitPoint.Lambda <= L.Length();
         }
 
-        private float CalculateShadow(Ray ray, HitPoint hitPoint, LightSource lightSource, int shadowSamples) {
+        /// <summary>
+        /// Calculates how much a hit point gets illuminated by a specific light source.
+        /// </summary>
+        /// <param name="ray">The eye ray</param>
+        /// <param name="hitPoint">The hit point</param>
+        /// <param name="lightSource">The light source</param>
+        /// <param name="shadowSamples">The number of shadow samples to be taken</param>
+        /// <returns>A number in the range [0, 1] where 0 is no illumination and 1 is complete illumination</returns>
+        private float CalculateIllumination(Ray ray, HitPoint hitPoint, LightSource lightSource, int shadowSamples) {
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             int reachLight = 0;
             Vector3 L = lightSource.Position - adjustedPosition;
