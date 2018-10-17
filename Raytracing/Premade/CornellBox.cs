@@ -40,9 +40,12 @@ namespace Raytracing.Premade {
                 new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, specularSphere, sphereReflectiveness/*, new Texture(@"Resources\earth.jpg", rotationOffset: 1.2f*(float)Math.PI)*/))
             };
                 var cornellBoxLight = new List<LightSource> {
+                /*
                 new LightSource(new Vector3(0, -0.9f, -0.6f), new Vector3(0.15f, 0.7f, 0.15f)),
                 new LightSource(new Vector3(0.4f, -0.9f, 0f), new Vector3(0.7f, 0.15f, 0.15f)),
                 new LightSource(new Vector3(-0.4f, -0.9f, 0f), new Vector3(0.15f, 0.15f, 0.7f))
+                */
+                new LightSource(new Vector3(0.5f, -0.6f, 0), Colour.White, 0.35f)
             };
                 return new Scene(cornellBoxSpheres, cornellBoxLight, accelerationStructure);
             }
