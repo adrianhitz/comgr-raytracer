@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Raytracing.Shapes {
 
@@ -18,13 +19,38 @@ namespace Raytracing.Shapes {
         public Vector3 Colour { get; }
 
         /// <summary>
+        /// The light source's radius. Can be zero.
+        /// </summary>
+        public float Radius { get; }
+
+        /// <summary>
         /// Creates a new light source
         /// </summary>
         /// <param name="position">The light source's position</param>
         /// <param name="colour">The light source's colour/intensity</param>
-        public LightSource(Vector3 position, Vector3 colour) {
+        /// <param name="radius">The light source's radius</param>
+        public LightSource(Vector3 position, Vector3 colour, float radius = 0) {
             this.Position = position;
             this.Colour = colour;
+            this.Radius = radius;
+        }
+
+        public Ray GenerateShadowFeeler(Vector3 origin) {
+            Vector3 L = Vector3.Normalize(Position - origin);
+            Vector3 Nx = Vector3.Normalize(Vector3.Cross(L, new Vector3(0, 1, 0)));
+            if(Nx == Vector3.Zero) Nx = Vector3.Normalize(Vector3.Cross(L, new Vector3(0, 0, 1)));
+            Vector3 Ny = Vector3.Normalize(Vector3.Cross(L, Nx));
+            // Generate a random point
+            // TODO Random as parameter?
+            Random random = new Random();
+            float r = (float)random.NextDouble();
+            float theta = (float)(2 * Math.PI * random.NextDouble());
+            float x = (float)(Math.Sqrt(r) * Math.Sin(theta));
+            float y = (float)(Math.Sqrt(r) * Math.Cos(theta));
+            Vector3 p = Position + Nx * x * Radius + Ny * y * Radius;
+            Vector3 Lprime = p - origin;
+            Ray shadowFeeler = new Ray(Position, Lprime);
+            return shadowFeeler;
         }
     }
 }
