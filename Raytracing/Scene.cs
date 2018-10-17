@@ -16,7 +16,7 @@ namespace Raytracing {
         private List<LightSource> LightSources { get; }
         private static readonly float HIT_POINT_ADJUSTMENT = 0.01f;
         private Vector3 ambientLight = Colour.Black;
-        private float shadowBrightness = 0.1f;
+        private float minShadowBrightness = 0.1f;
         private Random random = new Random();
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace Raytracing {
         /// Values outside the range [0,1] will be clamped.
         /// </summary>
         public float ShadowBrightness {
-            get => shadowBrightness;
-            set => shadowBrightness = Math.Min(Math.Max(value, 0), 1);
+            get => minShadowBrightness;
+            set => minShadowBrightness = Math.Min(Math.Max(value, 0), 1);
         }
 
         /// <summary>
@@ -138,17 +138,15 @@ namespace Raytracing {
             if(hitPoint != null) {
                 colour += hitPoint.Material.Emissive;
                 foreach(LightSource lightSource in LightSources) {
-                    bool occluded = IsOccluded(ray, hitPoint, lightSource);
-                    float shadow = CalculateIllumination(ray, hitPoint, lightSource, shadowSamples);
-
+                    float illumination = CalculateIllumination(ray, hitPoint, lightSource, shadowSamples);
+                    illumination = Math.Max(illumination, minShadowBrightness);
                     // Diffuse reflection
                     Vector3 diffuse = hitPoint.Diffuse(lightSource);
-                    //if(occluded) diffuse *= shadowBrightness;
-                    diffuse *= shadow;
+                    diffuse *= illumination;
                     colour += diffuse;
 
                     // Phong reflection
-                    if(!occluded) colour += hitPoint.Phong(lightSource, ray.Origin, PhongK);
+                    if(illumination >= 0.9f) colour += hitPoint.Phong(lightSource, ray.Origin, PhongK);
                 }
                 // Regular reflection including fresnel
                 if(recursionDepth > 0 && !hitPoint.Material.Reflective.Equals(Colour.Black)) {
