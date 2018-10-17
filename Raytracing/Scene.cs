@@ -40,6 +40,8 @@ namespace Raytracing {
             set => shadowBrightness = Math.Min(Math.Max(value, 0), 1);
         }
 
+        public int ShadowSamples { get; set; } = 5;
+
         /// <summary>
         /// Represents acceleration structures that can be used to accelerate the rendering of the scene by having to compare fewer objects.s
         /// </summary>
@@ -177,6 +179,18 @@ namespace Raytracing {
             Ray shadowFeeler = new Ray(adjustedPosition, L);
             HitPoint feelerHitPoint = FindClosestHitPoint(shadowFeeler);
             return feelerHitPoint != null && feelerHitPoint.Lambda <= L.Length();
+        }
+
+        private float CalculateShadow(Ray ray, HitPoint hitPoint, LightSource lightSource) {
+            Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
+            int reachLight = 0;
+            Vector3 L = lightSource.Position - adjustedPosition;
+            Ray[] shadowFeelers = lightSource.GenerateShadowFeelers(adjustedPosition, ShadowSamples);
+            foreach(Ray shadowFeeler in shadowFeelers) {
+                HitPoint feelerHitPoint = FindClosestHitPoint(shadowFeeler);
+                if(feelerHitPoint != null && feelerHitPoint.Lambda <= L.Length()) reachLight++;
+            }
+            return (float)reachLight / ShadowSamples;
         }
     }
 }
