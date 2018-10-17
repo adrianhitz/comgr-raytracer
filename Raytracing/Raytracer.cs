@@ -37,14 +37,20 @@ namespace Raytracing {
         public int AASamples { get; set; }
 
         /// <summary>
+        /// The numbers of samples to calculate shadows
+        /// </summary>
+        public int ShadowSamples { get; set; }
+
+        /// <summary>
         /// Creates a new raytracer with a camera and a scene
         /// </summary>
         /// <param name="camera">A camera</param>
         /// <param name="scene">A scene</param>
-        public Raytracer(Camera camera, Scene scene, int aaSamples = 1, int reflectionLevel = 2) {
+        public Raytracer(Camera camera, Scene scene, int aaSamples = 1, int shadowSamples = 1, int reflectionLevel = 2) {
             this.Camera = camera;
             this.Scene = scene;
             this.AASamples = aaSamples;
+            this.ShadowSamples = shadowSamples;
             this.ReflectionLevel = reflectionLevel;
         }
 
@@ -64,12 +70,12 @@ namespace Raytracing {
                     if(AASamples > 1) {
                         Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, AASamples, GaussSigma / width);
                         foreach(Ray eyeRay in eyeRays) {
-                            colour += Scene.CalculateColour(eyeRay, ReflectionLevel);
+                            colour += Scene.CalculateColour(eyeRay, ShadowSamples, ReflectionLevel);
                         }
                         colour /= AASamples;
                     } else {
                         Ray eyeRay = Camera.CreateEyeRay(pixel);
-                        colour += Scene.CalculateColour(eyeRay, ReflectionLevel);
+                        colour += Scene.CalculateColour(eyeRay, ShadowSamples, ReflectionLevel);
                     }
                     pixels[x, y] = colour;
                 }
