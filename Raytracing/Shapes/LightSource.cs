@@ -48,7 +48,7 @@ namespace Raytracing.Shapes {
             float y = (float)(Math.Sqrt(r) * Math.Cos(theta));
             Vector3 p = Position + Nx * x * Radius + Ny * y * Radius;
             Vector3 Lprime = p - origin;
-            Ray shadowFeeler = new Ray(Position, Lprime);
+            Ray shadowFeeler = new Ray(origin, Lprime);
             return shadowFeeler;
         }
 

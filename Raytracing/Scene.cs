@@ -40,7 +40,7 @@ namespace Raytracing {
             set => shadowBrightness = Math.Min(Math.Max(value, 0), 1);
         }
 
-        public int ShadowSamples { get; set; } = 5;
+        public int ShadowSamples { get; set; } = 20;
 
         /// <summary>
         /// Represents acceleration structures that can be used to accelerate the rendering of the scene by having to compare fewer objects.s
@@ -140,10 +140,12 @@ namespace Raytracing {
                 colour += hitPoint.Material.Emissive;
                 foreach(LightSource lightSource in LightSources) {
                     bool occluded = IsOccluded(ray, hitPoint, lightSource);
+                    float shadow = CalculateShadow(ray, hitPoint, lightSource);
 
                     // Diffuse reflection
                     Vector3 diffuse = hitPoint.Diffuse(lightSource);
-                    if(occluded) diffuse *= shadowBrightness;
+                    //if(occluded) diffuse *= shadowBrightness;
+                    diffuse *= shadow;
                     colour += diffuse;
 
                     // Phong reflection
@@ -173,6 +175,7 @@ namespace Raytracing {
         /// <param name="hitPoint">The HitPoint</param>
         /// <param name="lightSource">The LightSource</param>
         /// <returns>True if the hit point is occluded, false if it is illuminated.</returns>
+        [Obsolete]
         private bool IsOccluded(Ray ray, HitPoint hitPoint, LightSource lightSource) {
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             Vector3 L = lightSource.Position - adjustedPosition;
@@ -188,9 +191,9 @@ namespace Raytracing {
             Ray[] shadowFeelers = lightSource.GenerateShadowFeelers(adjustedPosition, ShadowSamples);
             foreach(Ray shadowFeeler in shadowFeelers) {
                 HitPoint feelerHitPoint = FindClosestHitPoint(shadowFeeler);
-                if(feelerHitPoint != null && feelerHitPoint.Lambda <= L.Length()) reachLight++;
+                if(!(feelerHitPoint != null && feelerHitPoint.Lambda <= L.Length())) reachLight++;
             }
-            return (float)reachLight / ShadowSamples;
+            return reachLight / (float)ShadowSamples;
         }
     }
 }
