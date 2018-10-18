@@ -82,6 +82,14 @@ namespace Raytracing {
             return new Ray(Position, direction);
         }
 
+        /// <summary>
+        /// Creates multiple randomly distributed eye rays for a specified pixel
+        /// </summary>
+        /// <param name="pixel">Pixel for which the eye ray is created. Component values should be in the range [-1,1].</param>
+        /// <param name="random">Instance of <see cref="Random"/></param>
+        /// <param name="sigma">Standard deviation</param>
+        /// <param name="n">The number of rays</param>
+        /// <returns>An array containing randomly distributed eye rays for the specified pixel</returns>
         public Ray[] CreateEyeRays(Vector2 pixel, Random random, float sigma, int n = 10) {
             Ray[] rays = new Ray[n];
             for(int i = 0; i < n; i++) {
