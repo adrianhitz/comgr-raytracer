@@ -69,7 +69,7 @@ namespace Raytracing {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1)) * 2 - 1);
                     Vector3 colour = Colour.Black;
                     if(AASamples > 1) {
-                        Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, AASamples, 2 * GaussSigma / width);
+                        Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, 2 * GaussSigma / width, AASamples);
                         foreach(Ray eyeRay in eyeRays) {
                             colour += Scene.CalculateColour(eyeRay, ShadowSamples, random, ReflectionLevel);
                         }

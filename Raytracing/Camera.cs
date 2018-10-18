@@ -82,7 +82,7 @@ namespace Raytracing {
             return new Ray(Position, direction);
         }
 
-        public Ray[] CreateEyeRays(Vector2 pixel, Random random, int n = 10, float sigma = 0.5f) {
+        public Ray[] CreateEyeRays(Vector2 pixel, Random random, float sigma, int n = 10) {
             Ray[] rays = new Ray[n];
             for(int i = 0; i < n; i++) {
                 float x = (float)random.NextGaussian(pixel.X, sigma);
