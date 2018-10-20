@@ -19,7 +19,7 @@ namespace Raytracing.Premade {
                     new Sphere(new Vector3(0, 0, -1005), 1000, whiteMaterial),
                     new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, new Material(Colour.Yellow, Colour.Black, Colour.Black)),
                     new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, Colour.Black, Colour.Black)),
-                    new Sphere(new Vector3(0, -10.99f, 0), 10, new Material(Colour.Black, Colour.Black, Colour.Black, Colour.White))
+                    new Sphere(new Vector3(0, -10.99f, 0), 10, new Material(Colour.Black, Colour.Black, Colour.Black, new Vector3(20, 20, 20)))
                 };
                 SceneObjectList sceneObjects = new SceneObjectList(cornellBoxSpheres);
                 return new PathtracingScene(sceneObjects);
