@@ -38,7 +38,7 @@ namespace Comgr {
 
         private static byte[] RaytracingImage() {
             Raytracer raytracer = new Raytracer(Premade.CornellBox.Camera(), Premade.CornellBox.Scene()) {
-                AASamples = 1,
+                SuperSampling = 1,
                 ShadowSamples = 1
             };
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);

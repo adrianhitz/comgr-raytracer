@@ -25,7 +25,7 @@ namespace Raytracing {
         /// How far the recursive calculation of reflection should go. 0 means no reflection,
         /// 1 just regular reflections, 2 reflections of reflections, etc.
         /// </summary>
-        public int ReflectionLevel { get; set; }
+        public int ReflectionDepth { get; set; }
 
         /// <summary>
         /// The standard deviation used for random sampling of pixels for anti-aliasing
@@ -35,10 +35,10 @@ namespace Raytracing {
         /// <summary>
         /// The numbers of samples for anti-aliasing
         /// </summary>
-        public int AASamples { get; set; }
+        public int SuperSampling { get; set; }
 
         /// <summary>
-        /// The numbers of samples to calculate shadows
+        /// The numbers of samples taken to calculate shadows
         /// </summary>
         public int ShadowSamples { get; set; }
 
@@ -47,12 +47,15 @@ namespace Raytracing {
         /// </summary>
         /// <param name="camera">A camera</param>
         /// <param name="scene">A scene</param>
-        public Raytracer(Camera camera, Scene scene, int aaSamples = 1, int shadowSamples = 1, int reflectionLevel = 2) {
+        /// <param name="superSampling">Number of samples for anti-aliasing</param>
+        /// <param name="shadowSamples">Number of samples taken to calculate shadows</param>
+        /// <param name="reflectionDepth">Recursion depth for the calculation of reflections</param>
+        public Raytracer(Camera camera, Scene scene, int superSampling = 1, int shadowSamples = 1, int reflectionDepth = 2) {
             this.Camera = camera;
             this.Scene = scene;
-            this.AASamples = aaSamples;
+            this.SuperSampling = superSampling;
             this.ShadowSamples = shadowSamples;
-            this.ReflectionLevel = reflectionLevel;
+            this.ReflectionDepth = reflectionDepth;
         }
 
         /// <summary>
@@ -68,15 +71,15 @@ namespace Raytracing {
                 for(int y = 0; y < height; y++) {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1)) * 2 - 1);
                     Vector3 colour = Colour.Black;
-                    if(AASamples > 1) {
-                        Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, 2 * GaussSigma / width, AASamples);
+                    if(SuperSampling > 1) {
+                        Ray[] eyeRays = Camera.CreateEyeRays(pixel, random, 2 * GaussSigma / width, SuperSampling);
                         foreach(Ray eyeRay in eyeRays) {
-                            colour += Scene.CalculateColour(eyeRay, ShadowSamples, random, ReflectionLevel);
+                            colour += Scene.CalculateColour(eyeRay, ShadowSamples, random, ReflectionDepth);
                         }
-                        colour /= AASamples;
+                        colour /= SuperSampling;
                     } else {
                         Ray eyeRay = Camera.CreateEyeRay(pixel);
-                        colour += Scene.CalculateColour(eyeRay, ShadowSamples, random, ReflectionLevel);
+                        colour += Scene.CalculateColour(eyeRay, ShadowSamples, random, ReflectionDepth);
                     }
                     pixels[x, y] = colour;
                 }
@@ -90,7 +93,7 @@ namespace Raytracing {
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
         /// <param name="gamma">Gamma value for transformation to SRGB colour space</param>
-        /// <returns></returns>
+        /// <returns>A byte array containing the calculated pixels for the scene</returns>
         public byte[] CalculatePixelsByteArray(int width, int height, float gamma = 2.2f) {
             // TODO This method should probably just return the WriteableBitmap instead
             Vector3[,] pixels = CalculatePixels(width, height);
