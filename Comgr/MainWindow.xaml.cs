@@ -46,8 +46,8 @@ namespace Comgr {
 
         private static byte[] PathtracingImage() {
             Pathtracer pathtracer = new Pathtracer(Premade.CornellBox.Camera(), Premade.PathCornellBox.Scene()) {
-                Samples = 256,
-                RecursionDepth = 5
+                Samples = 128,
+                RecursionDepth = 4
             };
             return pathtracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
