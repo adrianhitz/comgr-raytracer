@@ -26,7 +26,7 @@ namespace Raytracing.Helpers {
         /// <param name="gamma">Gamma value used for conversion.</param>
         /// <returns>Vector in linear colour space with component values in the range [0,1].</returns>
         public static Vector3 FromSRGB(this Vector3 colour, float gamma) {
-            float f(float component) => (float)Math.Pow(Clamp(component, 0, 255) / 255  , gamma);
+            float f(float component) => (float)Math.Pow(Clamp(component, 0, 255) / 255, gamma);
             return new Vector3(f(colour.X), f(colour.Y), f(colour.Z));
         }
 
@@ -42,6 +42,16 @@ namespace Raytracing.Helpers {
         }
 
         private static float Clamp(float value, float min, float max) => (float)Math.Min(Math.Max(value, min), max);
+
+        /// <summary>
+        /// Calculates the angle between two vectors
+        /// </summary>
+        /// <param name="vector">A vector</param>
+        /// <param name="other">Another vector</param>
+        /// <returns>The angle between the two vectors, in radians</returns>
+        public static float Angle(this Vector3 vector, Vector3 other) {
+            return (float)Math.Acos(Vector3.Dot(vector, other) / (vector.Length() * other.Length()));
+        }
     }
 }
 
