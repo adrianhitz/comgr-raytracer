@@ -7,7 +7,7 @@ namespace Raytracing.Acceleration {
     /// <summary>
     /// A container for scene objects, based on a list (no acceleration).
     /// </summary>
-    class SceneObjectList : ISceneObjectContainer {
+    public class SceneObjectList : ISceneObjectContainer {
         private readonly List<ISceneObject> sceneObjects;
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace Raytracing.Acceleration {
     /// <summary>
     /// Represents a container for drawable scene objects.
     /// </summary>
-    interface ISceneObjectContainer {
+    public interface ISceneObjectContainer {
 
         /// <summary>
         /// Adds a scene object to the container.
