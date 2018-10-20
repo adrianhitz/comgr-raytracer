@@ -17,14 +17,13 @@ namespace Raytracing.Pathtracing {
         private PathtracingScene Scene { get; }
 
         /// <summary>
-        /// How far the recursive calculation of reflection should go. 0 means no reflection,
-        /// 1 just regular reflections, 2 reflections of reflections, etc.
+        /// Recursion depth for path tracing
         /// </summary>
         public int RecursionDepth { get; set; }
 
 
         /// <summary>
-        /// The numbers of samples for anti-aliasing
+        /// The numbers of samples taken for each pixel
         /// </summary>
         public int Samples { get; set; }
 
@@ -34,6 +33,8 @@ namespace Raytracing.Pathtracing {
         /// </summary>
         /// <param name="camera">A camera</param>
         /// <param name="scene">A scene</param>
+        /// <param name="samples">Number of samples for each pixel</param>
+        /// <param name="recursionDepth">Recursion depth for path tracing</param>
         public Pathtracer(Camera camera, PathtracingScene scene, int samples = 1, int recursionDepth = 4) {
             this.Camera = camera;
             this.Scene = scene;
@@ -71,7 +72,7 @@ namespace Raytracing.Pathtracing {
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
         /// <param name="gamma">Gamma value for transformation to SRGB colour space</param>
-        /// <returns></returns>
+        /// <returns>A byte array containing the pixels of the calculated image</returns>
         public byte[] CalculatePixelsByteArray(int width, int height, float gamma = 2.2f) {
             // TODO This method should probably just return the WriteableBitmap instead
             Vector3[,] pixels = CalculatePixels(width, height);
