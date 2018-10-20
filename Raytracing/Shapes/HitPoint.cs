@@ -63,7 +63,7 @@ namespace Raytracing.Shapes {
         /// <param name="cameraPosition">The position of the camera</param>
         /// <param name="k">Phong reflection k value</param>
         /// <returns>Phong reflection colour</returns>
-        internal Vector3 Phong(LightSource lightSource, Vector3 cameraPosition, int k = 40) {
+        internal Vector3 Specular(LightSource lightSource, Vector3 cameraPosition, int k = 40) {
             if(Material != null) {
                 Vector3 L = Vector3.Normalize(lightSource.Position - this.Position); // TODO maybe move this calculation out of the method because it's repeated in other methods
                 float nL = Vector3.Dot(this.Normal, L);

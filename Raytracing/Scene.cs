@@ -145,7 +145,7 @@ namespace Raytracing {
                     colour += diffuse;
 
                     // Phong reflection
-                    if(illumination >= 0.9f) colour += hitPoint.Phong(lightSource, ray.Origin, PhongK);
+                    if(illumination >= 0.9f) colour += hitPoint.Specular(lightSource, ray.Origin, PhongK);
                 }
                 // Regular reflection including fresnel
                 if(recursionDepth > 0 && !hitPoint.Material.Reflective.Equals(Colour.Black)) {
