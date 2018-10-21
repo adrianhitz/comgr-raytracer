@@ -55,12 +55,11 @@ namespace Raytracing.Pathtracing {
                 for(int y = 0; y < height; y++) {
                     Vector2 pixel = new Vector2((x / (float)(width - 1)) * 2 - 1, (y / (float)(height - 1)) * 2 - 1);
                     Vector3 colour = Colour.Black;
+                    Ray eyeRay = Camera.CreateEyeRay(pixel);
                     for(int i = 0; i < Samples; i++) {
-                        Ray eyeRay = Camera.CreateEyeRay(pixel);
                         colour += Scene.CalculateColour(eyeRay, random, RecursionDepth);
                     }
-                    colour /= Samples;
-                    pixels[x, y] = colour;
+                    pixels[x, y] = colour / Samples;
                 }
             });
             return pixels;

@@ -44,13 +44,14 @@ namespace Raytracing.Pathtracing {
             HitPoint hitPoint = SceneObjects.FindClosestHitPoint(ray);
             Vector3 colour = Colour.Black;
             if(hitPoint != null) {
-                colour = hitPoint.Material.Emissive; ;
+                colour = hitPoint.Material.Emissive;
                 if(recursionDepth > 0) {
                     Vector3 n = hitPoint.Normal;
                     Vector3 randomVector;
                     do {
                         randomVector = random.NextVector3() * 2 - Vector3.One;
-                    } while(randomVector.Length() > 1 && randomVector.Angle(n) >= Math.PI / 2);
+                    } while(randomVector.Length() > 1);
+                    if(Vector3.Dot(randomVector, n) < 0) randomVector = Vector3.Negate(randomVector);
                     Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
                     Ray newRay = new Ray(adjustedPosition, randomVector);
                     float lambert = Vector3.Dot(randomVector, n);
