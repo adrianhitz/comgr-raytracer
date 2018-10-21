@@ -24,20 +24,18 @@ namespace Raytracing.Premade {
             /// </summary>
             /// <returns>Premade Cornell Box scene</returns>
             public static Scene Scene(Scene.AccelerationStructure accelerationStructure = Raytracing.Scene.AccelerationStructure.None) {
-                Vector3 specularWall = new Vector3(0, 0, 0);
+                Vector3 specularWall = new Vector3(0.01f, 0.01f, 0.01f);
                 Vector3 specularSphere = new Vector3(1, 1, 1);
-                Vector3 wallReflectiveness = new Vector3(0.05f, 0.05f, 0.05f);
-                Vector3 sphereReflectiveness = new Vector3(0.2f, 0.2f, 0.2f);
-                Material whiteWall = new Material(Colour.White, specularWall, wallReflectiveness);
+                Material whiteWall = new Material(Colour.White, specularWall);
                 var cornellBoxSpheres = new List<ISceneObject> {
-                new Sphere(new Vector3(1001, 0, 0), 1000, new Material(Colour.Red, specularWall, wallReflectiveness)),
-                new Sphere(new Vector3(-1001, 0, 0), 1000, new Material(Colour.Blue, specularWall, wallReflectiveness)),
+                new Sphere(new Vector3(1001, 0, 0), 1000, new Material(Colour.Red, specularWall)),
+                new Sphere(new Vector3(-1001, 0, 0), 1000, new Material(Colour.Blue, specularWall)),
                 new Sphere(new Vector3(0, 0, 1001), 1000, whiteWall),
                 new Sphere(new Vector3(0, -1001, 0), 1000, whiteWall),
                 new Sphere(new Vector3(0, 1001, 0), 1000, whiteWall),
-                new Sphere(new Vector3(0, 0, -1005), 1000,whiteWall),
-                new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, new Material(Colour.Yellow, specularSphere, sphereReflectiveness/*, new Texture(@"Resources\pluto.jpg", rotationOffset: 0.8f*(float)Math.PI)*/)),
-                new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, specularSphere, sphereReflectiveness/*, new Texture(@"Resources\earth.jpg", rotationOffset: 1.2f*(float)Math.PI)*/))
+                new Sphere(new Vector3(0, 0, -1005), 1000, whiteWall),
+                new Sphere(new Vector3(0.6f, 0.7f, -0.6f), 0.3f, new Material(Colour.Yellow, specularSphere/*, new Texture(@"Resources\pluto.jpg", rotationOffset: 0.8f*(float)Math.PI)*/)),
+                new Sphere(new Vector3(-0.3f, 0.4f, 0.3f), 0.6f, new Material(Colour.LightCyan, specularSphere/*, new Texture(@"Resources\earth.jpg", rotationOffset: 1.2f*(float)Math.PI)*/))
             };
                 var cornellBoxLight = new List<LightSource> {
                 /*

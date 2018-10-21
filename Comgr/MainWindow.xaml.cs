@@ -26,7 +26,7 @@ namespace Comgr {
             image.Source = writeableBitmap;
             grid.Children.Add(image);
             Task task = new Task(() => {
-                byte[] pixels = Lab03();
+                byte[] pixels = RaytracingImage();
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
                     this.Activate();

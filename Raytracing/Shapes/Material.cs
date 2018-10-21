@@ -38,13 +38,11 @@ namespace Raytracing.Shapes {
         /// </summary>
         /// <param name="diffuse">Diffuse reflection component</param>
         /// <param name="specular">Specular reflection component</param>
-        /// <param name="reflective">Regular reflection component</param>
         /// <param name="emissive">Emissive component</param>
         /// <param name="texture">Texture</param>
-        public Material(Vector3 diffuse, Vector3 specular, Vector3 reflective, Vector3 emissive, Texture texture = null) {
+        public Material(Vector3 diffuse, Vector3 specular, Vector3 emissive, Texture texture = null) {
             this.Diffuse = diffuse.Clamp();
             this.Specular = specular.Clamp();
-            this.Reflective = reflective.Clamp();
             this.Emissive = emissive.Clamp();
             this.Texture = texture;
         }
@@ -56,7 +54,7 @@ namespace Raytracing.Shapes {
         /// <param name="specular">Specular reflection component</param>
         /// <param name="reflective">Regular reflection component</param>
         /// <param name="texture">Texture</param>
-        public Material(Vector3 diffuse, Vector3 specular, Vector3 reflective, Texture texture = null)
-            : this(diffuse, specular, reflective, Colour.Black, texture) { }
+        public Material(Vector3 diffuse, Vector3 specular, Texture texture = null)
+            : this(diffuse, specular, Colour.Black, texture) { }
     }
 }
