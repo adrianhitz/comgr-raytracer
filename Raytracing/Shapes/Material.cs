@@ -19,11 +19,6 @@ namespace Raytracing.Shapes {
         public Vector3 Specular { get; }
 
         /// <summary>
-        /// Regular reflection component for this material. A vector with components in the range [0,1].
-        /// </summary>
-        public Vector3 Reflective { get; }
-
-        /// <summary>
         /// Emissive component for this material (how much the material glows). A vector with components in the range [0,1].
         /// </summary>
         public Vector3 Emissive { get; }
