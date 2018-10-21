@@ -26,7 +26,7 @@ namespace Comgr {
             image.Source = writeableBitmap;
             grid.Children.Add(image);
             Task task = new Task(() => {
-                byte[] pixels = PathtracingImage();
+                byte[] pixels = Lab03();
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
                     this.Activate();
@@ -51,5 +51,13 @@ namespace Comgr {
             };
             return pathtracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
+
+        private static byte[] Lab03() {
+            Raytracer raytracer = new Raytracer(Premade.Lab03.Camera(), Premade.Lab03.Scene()) {
+                SuperSampling = 20,
+                ShadowSamples = 1
+            };
+            return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
+    }
     }
 }
