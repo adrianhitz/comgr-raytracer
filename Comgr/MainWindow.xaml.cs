@@ -1,6 +1,7 @@
 ﻿using Raytracing;
 using Raytracing.Pathtracing;
 using Raytracing.Premade;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,12 +26,16 @@ namespace Comgr {
             image.Source = writeableBitmap;
             grid.Children.Add(image);
             Task task = new Task(() => {
-                byte[] pixels = Lab04Textures();
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                byte[] pixels = Lab03();
                 // byte[] pixels = Lab04Textures();
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
+                    stopwatch.Stop();
                     this.Activate();
-                    Debug.Write("Done!");
+                    TimeSpan ts = stopwatch.Elapsed;
+                    Debug.Write("Done! Rendering took " + ts.ToString());
                 });
             });
             task.Start();
