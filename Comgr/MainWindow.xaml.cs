@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static Raytracing.Scene;
 
 namespace Comgr {
 
@@ -16,7 +17,7 @@ namespace Comgr {
     /// </summary>
     public partial class MainWindow : Window {
 
-        private const int imageResolution = 800;
+        private const int imageResolution = 400;
 
         public MainWindow() {
             InitializeComponent();
@@ -28,14 +29,14 @@ namespace Comgr {
             Task task = new Task(() => {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                byte[] pixels = Lab03();
+                byte[] pixels = Lab04BVH();
                 // byte[] pixels = Lab04Textures();
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
                     stopwatch.Stop();
                     this.Activate();
                     TimeSpan ts = stopwatch.Elapsed;
-                    Debug.Write("Done! Rendering took " + ts.ToString());
+                    Debug.WriteLine("Done! Rendering took " + ts.ToString());
                 });
             });
             task.Start();
@@ -58,18 +59,17 @@ namespace Comgr {
         }
 
         private static byte[] Lab03() {
-            Raytracer raytracer = new Raytracer(Premade.Lab03.Camera(), Premade.Lab03.Scene()) {
-                SuperSampling = 1,
-                ShadowSamples = 1
-            };
+            Raytracer raytracer = new Raytracer(Premade.Lab03.Camera(), Premade.Lab03.Scene());
+            return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
+        }
+
+        private static byte[] Lab04BVH() {
+            Raytracer raytracer = new Raytracer(Premade.Lab04BVH.Camera(), Premade.Lab04BVH.Scene(AccelerationStructure.BVH));
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
 
         private static byte[] Lab04Textures() {
-            Raytracer raytracer = new Raytracer(Premade.Lab04Textures.Camera(), Premade.Lab04Textures.Scene()) {
-                SuperSampling = 1,
-                ShadowSamples = 1
-            };
+            Raytracer raytracer = new Raytracer(Premade.Lab04Textures.Camera(), Premade.Lab04Textures.Scene());
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
     }
