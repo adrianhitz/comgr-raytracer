@@ -17,14 +17,6 @@ namespace Raytracing.Acceleration.BVH {
         private List<Sphere> spheres;
 
         /// <summary>
-        /// Whether the list of spheres has changed since the last bounding volume hierarchy has been created.
-        /// If true, <see cref="BoundingVolumeHierarchy.CreateBVH"/> must be called before the BVH is interacted with.
-        /// </summary>
-        private bool changed;
-
-        private object objectLock = new object();
-
-        /// <summary>
         /// The root node of this binding volume hierarchy
         /// </summary>
         private BVHNode Root { get; set; }
@@ -42,7 +34,7 @@ namespace Raytracing.Acceleration.BVH {
         /// <param name="sceneObjects"></param>
         public BoundingVolumeHierarchy(IEnumerable<ISceneObject> sceneObjects) {
             spheres = sceneObjects.Select(s => s.GetBoundingSphere()).ToList<Sphere>();
-            changed = true;
+            CreateBVH();
         }
 
         /// <summary>
@@ -51,7 +43,7 @@ namespace Raytracing.Acceleration.BVH {
         /// <param name="sceneObject">Scene object to add</param>
         public void Add(ISceneObject sceneObject) {
             spheres.Add(sceneObject.GetBoundingSphere());
-            changed = true;
+            CreateBVH();
         }
 
         /// <summary>
@@ -60,7 +52,7 @@ namespace Raytracing.Acceleration.BVH {
         /// <param name="sceneObjects"></param>
         public void AddRange(IEnumerable<ISceneObject> sceneObjects) {
             spheres.AddRange(sceneObjects.Select(s => s.GetBoundingSphere()));
-            changed = true;
+            CreateBVH();
         }
 
         /// <summary>
@@ -73,14 +65,6 @@ namespace Raytracing.Acceleration.BVH {
         /// three-dimensional space and the surface normal.
         /// </returns>
         public HitPoint FindClosestHitPoint(Ray ray) {
-            if(changed) {
-                lock(objectLock) {
-                    if(changed) {
-                        CreateBVH();
-                        changed = false;
-                    }
-                }
-            }
             List<HitPoint> hitPoints = FindHitPointRecursive(ray, Root);
             return hitPoints.OrderBy(h => h.Lambda).FirstOrDefault(h => h.Lambda >= 0);
         }
@@ -113,7 +97,6 @@ namespace Raytracing.Acceleration.BVH {
             while(spheresTemp.Count > 1) {
                 Root = SmallestBoundingSphere(spheresTemp);
             }
-            changed = false;
         }
 
         /// <summary>
