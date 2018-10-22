@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Numerics;
 
 namespace Raytracing.Premade {
-    public partial class Premade {
+    public static partial class Premade {
         public static class Lab04Textures {
             public static Camera Camera() {
                 Vector3 position = new Vector3(0, 0, -4);
