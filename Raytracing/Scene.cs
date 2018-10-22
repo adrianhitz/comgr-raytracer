@@ -197,6 +197,7 @@ namespace Raytracing {
         /// <param name="shadowSamples">The number of shadow samples to be taken</param>
         /// <returns>A number in the range [0, 1] where 0 is no illumination and 1 is complete illumination</returns>
         private float CalculateIllumination(Ray ray, HitPoint hitPoint, LightSource lightSource, int shadowSamples, Random random) {
+            if(shadowSamples <= 0) return 1;
             Vector3 adjustedPosition = hitPoint.Position - ray.Direction * HIT_POINT_ADJUSTMENT;
             int reachLight = 0;
             Vector3 L = lightSource.Position - adjustedPosition;
