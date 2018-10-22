@@ -10,6 +10,7 @@ namespace Raytracing.Shapes {
     /// </summary>
     public class Texture {
         private readonly Bitmap bitmap;
+        private readonly object bitmapLock = new object();
 
         /// <summary>
         /// The gamma value that is used when converting the image from SRGB to linear colour space.
@@ -24,12 +25,12 @@ namespace Raytracing.Shapes {
         /// <summary>
         /// The textures width, in pixels.
         /// </summary>
-        public int Width { get => bitmap.Width; }
+        public readonly int Width;
 
         /// <summary>
         /// The textures height, in pixels.
         /// </summary>
-        public int Height { get => bitmap.Height; }
+        public readonly int Height;
 
         /// <summary>
         /// Creates a new <see cref="Texture"/> with the image at the given path. Supports BMP, GIF, EXIF, JPG, PNG and TIFF image files.
@@ -39,6 +40,8 @@ namespace Raytracing.Shapes {
         /// <param name="rotationOffset">How much the texture is rotated horizontally before being projected onto the object, in radians.</param>
         public Texture(string path, float gamma = 2.2f, float rotationOffset = 0) {
             bitmap = new Bitmap(path);
+            this.Width = bitmap.Width;
+            this.Height = bitmap.Height;
             this.Gamma = gamma;
             this.RotationOffset = rotationOffset;
         }
@@ -52,7 +55,10 @@ namespace Raytracing.Shapes {
         public Vector3 GetPixel(float s, float t) {
             int x = (int)(((s + RotationOffset / (2 * Math.PI)) % 1.0) * (Width - 1));
             int y = (int)((1 - (t % 1.0)) * (Height - 1));
-            Color c = bitmap.GetPixel(x, y);
+            Color c;
+            lock(bitmapLock) {
+                c = bitmap.GetPixel(x, y);
+            }
             return new Vector3(c.R, c.G, c.B).FromSRGB(Gamma);
         }
     }
