@@ -25,7 +25,8 @@ namespace Comgr {
             image.Source = writeableBitmap;
             grid.Children.Add(image);
             Task task = new Task(() => {
-                byte[] pixels = Lab03();
+                byte[] pixels = Lab04Textures();
+                // byte[] pixels = Lab04Textures();
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
                     this.Activate();
@@ -57,6 +58,14 @@ namespace Comgr {
                 ShadowSamples = 1
             };
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
-    }
+        }
+
+        private static byte[] Lab04Textures() {
+            Raytracer raytracer = new Raytracer(Premade.Lab04Textures.Camera(), Premade.Lab04Textures.Scene()) {
+                SuperSampling = 1,
+                ShadowSamples = 1
+            };
+            return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
+        }
     }
 }

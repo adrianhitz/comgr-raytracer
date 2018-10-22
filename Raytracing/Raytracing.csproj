@@ -49,6 +49,7 @@
     <Compile Include="Premade\CornellBox.cs" />
     <Compile Include="Helpers\RandomExtensions.cs" />
     <Compile Include="Premade\Lab03.cs" />
+    <Compile Include="Premade\Lab04Textures.cs" />
     <Compile Include="Premade\ManySpheres.cs" />
     <Compile Include="Premade\PathCornellBox.cs" />
     <Compile Include="Shapes\BoundingSphere.cs" />
