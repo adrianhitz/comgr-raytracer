@@ -22,6 +22,8 @@ namespace Raytracing.Acceleration.BVH {
         /// </summary>
         private bool changed;
 
+        private object objectLock = new object();
+
         /// <summary>
         /// The root node of this binding volume hierarchy
         /// </summary>
@@ -71,7 +73,14 @@ namespace Raytracing.Acceleration.BVH {
         /// three-dimensional space and the surface normal.
         /// </returns>
         public HitPoint FindClosestHitPoint(Ray ray) {
-            if(changed) CreateBVH();
+            if(changed) {
+                lock(objectLock) {
+                    if(changed) {
+                        CreateBVH();
+                        changed = false;
+                    }
+                }
+            }
             List<HitPoint> hitPoints = FindHitPointRecursive(ray, Root);
             return hitPoints.OrderBy(h => h.Lambda).FirstOrDefault(h => h.Lambda >= 0);
         }
