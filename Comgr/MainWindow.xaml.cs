@@ -33,7 +33,7 @@ namespace Comgr {
                 // byte[] pixels = Lab04BVH();
                 // byte[] pixels = Lab04Textures();
                 // byte[] pixels = Lab05();
-                byte[] pixels = PathtracingImage();
+                byte[] pixels = Lab06();
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
                     stopwatch.Stop();
@@ -51,14 +51,6 @@ namespace Comgr {
                 ShadowSamples = 1
             };
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
-        }
-
-        private static byte[] PathtracingImage() {
-            Pathtracer pathtracer = new Pathtracer(Premade.CornellBox.Camera(), Premade.PathCornellBox.Scene()) {
-                Samples = 512,
-                RecursionDepth = 4
-            };
-            return pathtracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
 
         private static byte[] Lab03() {
@@ -79,6 +71,14 @@ namespace Comgr {
         private static byte[] Lab05() {
             Raytracer raytracer = new Raytracer(Premade.Lab05.Camera(), Premade.Lab05.Scene(), 30, 30);
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
+        }
+
+        private static byte[] Lab06() {
+            Pathtracer pathtracer = new Pathtracer(Premade.CornellBox.Camera(), Premade.Lab06.Scene()) {
+                Samples = 512,
+                RecursionDepth = 4
+            };
+            return pathtracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
     }
 }

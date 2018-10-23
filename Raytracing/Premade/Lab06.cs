@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Raytracing.Premade {
     public static partial class Premade {
-        public class PathCornellBox {
+        public class Lab06 {
             public static PathtracingScene Scene(Scene.AccelerationStructure accelerationStructure = Raytracing.Scene.AccelerationStructure.None) {
                 Material whiteMaterial = new Material(Colour.White * 0.9f, Colour.Black, Colour.Black);
                 var cornellBoxSpheres = new List<ISceneObject> {
