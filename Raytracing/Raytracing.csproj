@@ -46,14 +46,12 @@
   <ItemGroup>
     <Compile Include="Pathtracing\Pathtracer.cs" />
     <Compile Include="Pathtracing\PathtracingScene.cs" />
-    <Compile Include="Premade\CornellBox.cs" />
     <Compile Include="Helpers\RandomExtensions.cs" />
     <Compile Include="Premade\Lab03.cs" />
     <Compile Include="Premade\Lab04BVH.cs" />
     <Compile Include="Premade\Lab04Textures.cs" />
     <Compile Include="Premade\Lab05.cs" />
-    <Compile Include="Premade\ManySpheres.cs" />
-    <Compile Include="Premade\PathCornellBox.cs" />
+    <Compile Include="Premade\Lab06.cs" />
     <Compile Include="Shapes\BoundingSphere.cs" />
     <Compile Include="Acceleration\BVH\BoundingVolumeHierarchy.cs" />
     <Compile Include="Acceleration\BVH\BVHNode.cs" />

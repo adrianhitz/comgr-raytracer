@@ -2,12 +2,19 @@
 using Raytracing.Helpers;
 using Raytracing.Pathtracing;
 using Raytracing.Shapes;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
 namespace Raytracing.Premade {
     public static partial class Premade {
         public class Lab06 {
+            public static Camera Camera() {
+                Vector3 position = new Vector3(0, 0, -4);
+                Vector3 lookAt = new Vector3(0, 0, 6);
+                float fov = (float)Math.PI / 5;
+                return new Camera(position, lookAt, fov);
+            }
             public static PathtracingScene Scene(Scene.AccelerationStructure accelerationStructure = Raytracing.Scene.AccelerationStructure.None) {
                 Material whiteMaterial = new Material(Colour.White * 0.9f, Colour.Black, Colour.Black);
                 var cornellBoxSpheres = new List<ISceneObject> {

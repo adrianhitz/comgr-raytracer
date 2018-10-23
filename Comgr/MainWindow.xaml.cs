@@ -45,14 +45,6 @@ namespace Comgr {
             task.Start();
         }
 
-        private static byte[] RaytracingImage() {
-            Raytracer raytracer = new Raytracer(Premade.CornellBox.Camera(), Premade.CornellBox.Scene()) {
-                SuperSampling = 1,
-                ShadowSamples = 1
-            };
-            return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
-        }
-
         private static byte[] Lab03() {
             Raytracer raytracer = new Raytracer(Premade.Lab03.Camera(), Premade.Lab03.Scene());
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
@@ -74,7 +66,7 @@ namespace Comgr {
         }
 
         private static byte[] Lab06() {
-            Pathtracer pathtracer = new Pathtracer(Premade.CornellBox.Camera(), Premade.Lab06.Scene()) {
+            Pathtracer pathtracer = new Pathtracer(Premade.Lab06.Camera(), Premade.Lab06.Scene()) {
                 Samples = 512,
                 RecursionDepth = 4
             };
