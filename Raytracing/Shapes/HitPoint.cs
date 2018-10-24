@@ -81,8 +81,7 @@ namespace Raytracing.Shapes {
         /// <returns>Fresnel colour value</returns>
         internal Vector3 Fresnel(Ray ray) {
             if(Material != null) {
-                Vector3 reflective = Material.Specular;
-                return reflective + (Vector3.One - reflective * (float)Math.Pow(1 - Vector3.Dot(Normal, Vector3.Reflect(ray.Direction, Normal)), 5));
+                return Material.Specular + (Vector3.One - Material.Specular) * (float)Math.Pow(1 - Vector3.Dot(Normal, Vector3.Reflect(ray.Direction, Normal)), 5);
             }
             return Colour.Black;
         }

@@ -151,7 +151,7 @@ namespace Raytracing {
                 if(recursionDepth > 0 && !hitPoint.Material.Specular.Equals(Colour.Black)) {
                     Vector3 reflection = CalculateReflection(ray, hitPoint, shadowSamples, random, recursionDepth - 1);
                     Vector3 fresnel = hitPoint.Fresnel(ray);
-                    colour += reflection * fresnel * hitPoint.Material.Specular;
+                    colour += reflection * fresnel;
                 }
             }
             return colour;
