@@ -6,7 +6,7 @@ namespace Raytracing.Acceleration.BVH {
     /// <summary>
     /// Represents a node in a bounding volume hierarchy.
     /// </summary>
-    class BVHNode : Sphere {
+    internal class BVHNode : Sphere {
 
         /// <summary>
         /// A child object of this node.

@@ -6,8 +6,8 @@ namespace Raytracing.Acceleration.BVH {
 
     /// <summary>
     /// A bounding volume hierarchy implementation to accelerate the rendering of scenes or more specifically the calculation of hit points. The bounding
-    /// volume hierarchy is lazy, it is only built when <see cref="BoundingVolumeHierarchy.FindClosestHitPoint(Ray)"/> is called and if the contents have
-    /// changed since the last call.
+    /// volume hierarchy is rebuilt every time something is added. Not ideal, but it avoids using locks. The implementation overall is not thread safe,
+    /// but there are no issues as long as only <see cref="FindClosestHitPoint(Ray)"/> is called from a parallel context.
     /// </summary>
     internal class BoundingVolumeHierarchy : ISceneObjectContainer {
 
@@ -78,8 +78,6 @@ namespace Raytracing.Acceleration.BVH {
         private List<HitPoint> FindHitPointRecursive(Ray ray, Sphere current) {
             List<HitPoint> hitPoints = new List<HitPoint>();
             if(current is BoundingSphere boundingSphere) {
-                // TODO To work well with objects of any type this should probably check the
-                // bounding sphere first before it checks the wrapped object.
                 HitPoint hitPoint = boundingSphere.WrappedObject.CalculateHitPoint(ray);
                 if(hitPoint != null) hitPoints.Add(hitPoint);
             } else if(current is BVHNode bvh) {
