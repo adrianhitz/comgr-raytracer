@@ -1,14 +1,11 @@
 ﻿using Raytracing;
 using Raytracing.Pathtracing;
 using Raytracing.Premade;
-using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static Raytracing.Scene;
 
 namespace Comgr {
 
@@ -27,22 +24,17 @@ namespace Comgr {
             image.Source = writeableBitmap;
             grid.Children.Add(image);
             Task task = new Task(() => {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
 
-                // byte[] pixels = Lab03();
+                byte[] pixels = Lab03();
                 // byte[] pixels = Lab04BVH();
                 // byte[] pixels = Lab04Textures();
                 // byte[] pixels = Lab05();
                 // byte[] pixels = Lab06();
-                byte[] pixels = DepthOfField();
+                // byte[] pixels = DepthOfField();
 
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
-                    stopwatch.Stop();
                     this.Activate();
-                    TimeSpan ts = stopwatch.Elapsed;
-                    Debug.WriteLine("Done! Rendering took " + ts.ToString());
                 });
             });
             task.Start();
@@ -54,7 +46,7 @@ namespace Comgr {
         }
 
         private static byte[] Lab04BVH() {
-            Raytracer raytracer = new Raytracer(Premade.Lab04BVH.Camera(), Premade.Lab04BVH.Scene(AccelerationStructure.BVH));
+            Raytracer raytracer = new Raytracer(Premade.Lab04BVH.Camera(), Premade.Lab04BVH.Scene(Scene.AccelerationStructure.BVH));
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
 
