@@ -2,6 +2,10 @@
 using System.Numerics;
 
 namespace Raytracing.Helpers {
+
+    /// <summary>
+    /// Contains extension methods for <see cref="Random"/> objects.
+    /// </summary>
     static class RandomExtensions {
 
         /// <summary>
