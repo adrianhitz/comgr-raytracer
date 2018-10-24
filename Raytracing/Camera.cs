@@ -31,6 +31,11 @@ namespace Raytracing {
         public float FOV { get; }
 
         /// <summary>
+        /// The camera's aperture radius
+        /// </summary>
+        public float ApertureRadius { get; }
+
+        /// <summary>
         /// The camera's f vector. (Normalised vector from the camera position to the look at position.)
         /// </summary>
         public Vector3 F { get; }
@@ -51,7 +56,9 @@ namespace Raytracing {
         /// <param name="position">The camera position (also called "eye")</param>
         /// <param name="lookAt">Point at which the camera is looking</param>
         /// <param name="fov">The camera's field of view, in radians</param>
-        public Camera(Vector3 position, Vector3 lookAt, float fov) : this(position, lookAt, fov, new Vector3(0, 1, 0)) { }
+        /// <param name="apertureRadius">The radius of the camera's aperture</param>
+        public Camera(Vector3 position, Vector3 lookAt, float fov, float apertureRadius = 0)
+            : this(position, lookAt, fov, apertureRadius, new Vector3(0, 1, 0)) { }
 
 
         /// <summary>
@@ -60,12 +67,14 @@ namespace Raytracing {
         /// <param name="position">The camera position (also called "eye")</param>
         /// <param name="lookAt">Point at which the camera is looking</param>
         /// <param name="fov">The camera's field of view, in radians</param>
+        /// <param name="apertureRadius">The radius of the camera's aperture</param>
         /// <param name="up">The camera's up vector</param>
-        public Camera(Vector3 position, Vector3 lookAt, float fov, Vector3 up) {
+        public Camera(Vector3 position, Vector3 lookAt, float fov, float apertureRadius, Vector3 up) {
             this.Position = position;
             this.LookAt = lookAt;
-            this.Up = up;
             this.FOV = fov;
+            this.ApertureRadius = apertureRadius;
+            this.Up = up;
 
             this.F = Vector3.Normalize(LookAt - Position);
             this.R = Vector3.Normalize(Vector3.Cross(F, Up));
@@ -73,18 +82,29 @@ namespace Raytracing {
         }
 
         /// <summary>
-        /// Creates an eye ray for a specified pixel
+        /// Creates an eye ray for a specified pixel. Needs an instance of <see cref="Random"/> if the camera's aperture radius is greater
+        /// than 0. If the aperture radius is greater than 0 but no <see cref="Random"/> instance is passed, a radius of 0 is used.
         /// </summary>
         /// <param name="pixel">Pixel for which the eye ray is created. Component values should be in the range [-1,1].</param>
+        /// <param name="random">An instance of <see cref="Random"/>. Necessary if the camera's aperture radius is greater than 0.</param>
         /// <returns>An eye ray for the specified pixel</returns>
-        public Ray CreateEyeRay(Vector2 pixel) {
-            Vector3 direction = F + (pixel.X * R + pixel.Y * U) * (float)Math.Tan(FOV / 2);
-            return new Ray(Position, direction);
+        public Ray CreateEyeRay(Vector2 pixel, Random random = null) {
+            Vector3 fPrime = F;
+            Vector3 posPrime = Position;
+            if(ApertureRadius > 0 && random != null) {
+                float r = (float)Math.Sqrt(random.NextDouble());
+                float theta = (float)(random.NextDouble() * 2 * Math.PI);
+                Vector3 a = new Vector3((float)(r * Math.Sin(theta)), (float)(r * Math.Cos(theta)), 0) * ApertureRadius;
+                posPrime += a;
+                fPrime -= a / (LookAt - posPrime).Length();
+            }
+            Vector3 direction = fPrime + (pixel.X * R + pixel.Y * U) * (float)Math.Tan(FOV / 2);
+            return new Ray(posPrime, direction);
         }
 
         /// <summary>
         /// Creates multiple randomly distributed eye rays for a specified pixel
-        /// </summary>
+        //x/ </summary>
         /// <param name="pixel">Pixel for which the eye ray is created. Component values should be in the range [-1,1].</param>
         /// <param name="random">Instance of <see cref="Random"/></param>
         /// <param name="sigma">Standard deviation</param>
@@ -95,7 +115,7 @@ namespace Raytracing {
             for(int i = 0; i < n; i++) {
                 float x = (float)random.NextGaussian(pixel.X, sigma);
                 float y = (float)random.NextGaussian(pixel.Y, sigma);
-                rays[i] = CreateEyeRay(new Vector2(x, y));
+                rays[i] = CreateEyeRay(new Vector2(x, y), random);
             }
             return rays;
         }
