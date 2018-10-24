@@ -31,7 +31,6 @@ namespace Raytracing.Premade {
                 SceneObjectList sceneObjects = new SceneObjectList(cornellBoxSpheres);
                 return new PathtracingScene(sceneObjects);
             }
-
         }
     }
 }

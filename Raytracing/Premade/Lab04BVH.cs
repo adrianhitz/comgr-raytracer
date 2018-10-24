@@ -7,7 +7,6 @@ using System.Numerics;
 namespace Raytracing.Premade {
     public static partial class Premade {
         public static class Lab04BVH {
-
             public static Camera Camera() {
                 Vector3 position = new Vector3(0, 0, -4);
                 Vector3 lookAt = new Vector3(0, 0, 6);
