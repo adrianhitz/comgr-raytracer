@@ -15,8 +15,6 @@ namespace Raytracing {
         private ISceneObjectContainer SceneObjects { get; }
         private List<LightSource> LightSources { get; }
         private static readonly float HIT_POINT_ADJUSTMENT = 0.01f;
-        private Vector3 ambientLight = Colour.Black;
-        private float minShadowBrightness = 0.1f;
 
         /// <summary>
         /// The k value used for the calculation of Phong reflection.
@@ -30,6 +28,7 @@ namespace Raytracing {
             get => ambientLight;
             set => ambientLight = value.Clamp();
         }
+        private Vector3 ambientLight = Colour.Black;
 
         /// <summary>
         /// Brightness of shadows, with 0 representing completely black shadows and 1 representing no shadows.
@@ -39,6 +38,7 @@ namespace Raytracing {
             get => minShadowBrightness;
             set => minShadowBrightness = Math.Min(Math.Max(value, 0), 1);
         }
+        private float minShadowBrightness = 0.1f;
 
         /// <summary>
         /// Represents acceleration structures that can be used to accelerate the rendering of the scene by having to compare fewer objects.s
