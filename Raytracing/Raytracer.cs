@@ -95,7 +95,6 @@ namespace Raytracing {
         /// <param name="gamma">Gamma value for transformation to SRGB colour space</param>
         /// <returns>A byte array containing the calculated pixels for the scene</returns>
         public byte[] CalculatePixelsByteArray(int width, int height, float gamma = 2.2f) {
-            // TODO This method should probably just return the WriteableBitmap instead
             Vector3[,] pixels = CalculatePixels(width, height);
             int stride = pixels.GetLength(0) * 3;
             byte[] bytes = new byte[stride * height];

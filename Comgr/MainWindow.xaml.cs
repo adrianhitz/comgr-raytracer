@@ -25,9 +25,9 @@ namespace Comgr {
             grid.Children.Add(image);
             Task task = new Task(() => {
 
-                byte[] pixels = Lab03();
+                // byte[] pixels = Lab03();
                 // byte[] pixels = Lab04BVH();
-                // byte[] pixels = Lab04Textures();
+                byte[] pixels = Lab04Textures();
                 // byte[] pixels = Lab05();
                 // byte[] pixels = Lab06();
                 // byte[] pixels = DepthOfField();

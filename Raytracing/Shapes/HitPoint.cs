@@ -65,7 +65,7 @@ namespace Raytracing.Shapes {
         /// <returns>Phong reflection colour</returns>
         internal Vector3 Specular(LightSource lightSource, Vector3 cameraPosition, int k = 40) {
             if(Material != null) {
-                Vector3 L = Vector3.Normalize(lightSource.Position - this.Position); // TODO maybe move this calculation out of the method because it's repeated in other methods
+                Vector3 L = Vector3.Normalize(lightSource.Position - this.Position);
                 float nL = Vector3.Dot(this.Normal, L);
                 Vector3 eh = Vector3.Normalize(this.Position - cameraPosition);
                 Vector3 r = Vector3.Normalize(2 * nL * this.Normal - L);
