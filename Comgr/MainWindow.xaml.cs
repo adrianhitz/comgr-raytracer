@@ -33,7 +33,8 @@ namespace Comgr {
                 // byte[] pixels = Lab04BVH();
                 // byte[] pixels = Lab04Textures();
                 // byte[] pixels = Lab05();
-                byte[] pixels = Lab06();
+                // byte[] pixels = Lab06();
+                byte[] pixels = DepthOfField();
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
                     stopwatch.Stop();
@@ -71,6 +72,11 @@ namespace Comgr {
                 RecursionDepth = 4
             };
             return pathtracer.CalculatePixelsByteArray(imageResolution, imageResolution);
+        }
+
+        private static byte[] DepthOfField() {
+            Raytracer raytracer = new Raytracer(Premade.DepthOfField.Camera(), Premade.DepthOfField.Scene(), 50, 1);
+            return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
     }
 }

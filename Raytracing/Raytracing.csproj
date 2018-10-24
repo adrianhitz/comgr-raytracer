@@ -47,6 +47,7 @@
     <Compile Include="Pathtracing\Pathtracer.cs" />
     <Compile Include="Pathtracing\PathtracingScene.cs" />
     <Compile Include="Helpers\RandomExtensions.cs" />
+    <Compile Include="Premade\DepthOfField.cs" />
     <Compile Include="Premade\Lab03.cs" />
     <Compile Include="Premade\Lab04BVH.cs" />
     <Compile Include="Premade\Lab04Textures.cs" />
