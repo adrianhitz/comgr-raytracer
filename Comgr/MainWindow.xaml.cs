@@ -29,12 +29,14 @@ namespace Comgr {
             Task task = new Task(() => {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
+
                 // byte[] pixels = Lab03();
                 // byte[] pixels = Lab04BVH();
                 // byte[] pixels = Lab04Textures();
                 // byte[] pixels = Lab05();
                 // byte[] pixels = Lab06();
                 byte[] pixels = DepthOfField();
+
                 this.Dispatcher.Invoke(() => {
                     writeableBitmap.WritePixels(new Int32Rect(0, 0, imageResolution, imageResolution), pixels, imageResolution * 3, 0);
                     stopwatch.Stop();
@@ -75,7 +77,10 @@ namespace Comgr {
         }
 
         private static byte[] DepthOfField() {
-            Raytracer raytracer = new Raytracer(Premade.DepthOfField.Camera(), Premade.DepthOfField.Scene(), 50, 1);
+            Raytracer raytracer = new Raytracer(Premade.DepthOfField.Camera(), Premade.DepthOfField.Scene()) {
+                SuperSampling = 512,
+                ShadowSamples = 4
+            };
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
     }
