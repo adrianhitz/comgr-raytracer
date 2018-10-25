@@ -25,9 +25,9 @@ namespace Comgr {
             grid.Children.Add(image);
             Task task = new Task(() => {
 
-                // byte[] pixels = Lab03();
+                byte[] pixels = Lab03();
                 // byte[] pixels = Lab04BVH();
-                byte[] pixels = Lab04Textures();
+                // byte[] pixels = Lab04Textures();
                 // byte[] pixels = Lab05();
                 // byte[] pixels = Lab06();
                 // byte[] pixels = DepthOfField();
@@ -56,7 +56,10 @@ namespace Comgr {
         }
 
         private static byte[] Lab05() {
-            Raytracer raytracer = new Raytracer(Premade.Lab05.Camera(), Premade.Lab05.Scene(), 30, 30);
+            Raytracer raytracer = new Raytracer(Premade.Lab05.Camera(), Premade.Lab05.Scene()) {
+                ShadowSamples = 5,
+                SuperSampling = 50
+            };
             return raytracer.CalculatePixelsByteArray(imageResolution, imageResolution);
         }
 
